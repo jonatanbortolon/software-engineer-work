@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title ?? '' }}</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/app.css') }}">
+    <!-- AlpineJS -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <!-- ChartJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    @!section('head')
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="bg-gray-100 font-family-karla flex">
+            @include('partials/aside')
+            
+            <div class="w-full flex flex-col h-screen overflow-y-hidden">
+                @include('partials/header')
+            
+                <div class="w-full overflow-x-hidden border-t flex flex-col">
+                    
+                    @!section('content')
+            
+                    @include('partials/footer')
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

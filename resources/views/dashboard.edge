@@ -1,0 +1,129 @@
+@layout('layouts/masterauth')
+@set('title', 'Dashboard')
+@set('menuActive', 'dashboard')
+@section('content')
+<main class="w-full flex-grow p-6">
+    <h1 class="text-3xl text-black pb-6">Dashboard</h1>
+
+    <div class="flex flex-wrap mt-6">
+        <div class="w-full lg:w-1/2 pr-0 lg:pr-2">
+            <p class="text-xl pb-3 flex items-center">
+                <i class="fas fa-plus mr-3"></i> Produtos mais vendidos
+            </p>
+            <div class="p-6 bg-white">
+                <canvas id="productsChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+        <div class="w-full lg:w-1/2 pl-0 lg:pl-2 mt-12 lg:mt-0">
+            <p class="text-xl pb-3 flex items-center">
+                <i class="fas fa-check mr-3"></i> Faturamentos
+            </p>
+            <div class="p-6 bg-white">
+                <canvas id="billingsChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="w-full mt-12">
+        <p class="text-xl pb-3 flex items-center">
+            <i class="fas fa-list mr-3"></i> Clientes que mais compraram
+        </p>
+        <div class="bg-white overflow-auto">
+            <table class="min-w-full bg-white">
+                <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Nome</th>
+                        <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Telefone</th>
+                        <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Email</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    @each(client in clientsChart)
+                      <tr>
+                        <td class="w-1/3 text-left py-3 px-4">{{client.name}}</td>
+                        <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="tel:{{client.phone}}">{{client.phone}}</a></td>
+                        <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="mailto:{{client.email}}">{{client.email}}</a></td>
+                    </tr>
+                    @endeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<script>
+    var productsChart = document.getElementById('productsChart');
+    var myChart = new Chart(productsChart, {
+        type: 'bar',
+        data: {
+            labels: JSON.parse(JSON.stringify({{{stringify(productsChart).replace(/&quote;/g,'"')}}})).map(product => product.name),
+            datasets: [{
+                label: 'Quantidade',
+                data: JSON.parse(JSON.stringify({{{stringify(productsChart).replace(/&quote;/g,'"')}}})).map(product => product.quantity),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    var billingsChart = document.getElementById('billingsChart');
+    var myLineChart = new Chart(billingsChart, {
+        type: 'line',
+        data: {
+            labels: JSON.parse(JSON.stringify({{{stringify(billingsChart).replace(/&quote;/g,'"')}}})).map(month => new Date(month.period).toLocaleDateString()),
+            datasets: [{
+                label: 'R$',
+                data: JSON.parse(JSON.stringify({{{stringify(billingsChart).replace(/&quote;/g,'"')}}})).map(month => month.totalPrice / 100),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+@endsection
