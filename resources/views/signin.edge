@@ -1,4 +1,5 @@
 @layout('layouts/master')
+@set('title', 'Entrar')
 @section('content')
 <main>
     <div class="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 relative">
@@ -7,11 +8,10 @@
 
           <div class="mb-6 text-center">
             <h3 class="text-3xl inline-flex items-center">
-              <svg class="w-6 h-6 inline-block text-indigo-500 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
-              Web Application
+              Gestaco
             </h3>
             <p class="text-gray-600">
-              Welcome, please log in to your dashboard
+              Olá, entre para começar a usar
             </p>
           </div>
 
@@ -30,9 +30,9 @@
               </div>
             </form>
             <div class="mt-6 text-center text-sm">
-              <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block mb-2 md:mb-0" href="{{ route('auth.signup.get') }}">Criar conta</a>
+              <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block mb-2 md:mb-0" href="{{ route('auth.signup.get') }}">Nao é cadastrado ainda? Crie uma conta!</a>
               {{--  <span class="text-gray-600 mx-1 hidden md:inline-block">·</span>
-              <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block" href="{{ route('auth.signup.get') }}">Forgot Password?</a>  --}}
+              <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block" href="{{ route('auth.signup.get') }}">Esqueceu sua senha? Recupere agora</a>  --}}
             </div>
           </div>
 
@@ -48,7 +48,7 @@
           @endif
 
           <div class="text-xs text-gray-600 text-center mt-6">
-            <span class="font-semibold">Web Application</span> &copy; <script>document.write((new Date).getFullYear());</script> · <a class="text-gray-600 hover:text-gray-700 underline" href="javascript:void(0)">Termos e condições</a>
+            <span class="font-semibold">Gestaco</span> &copy; <script>document.write((new Date).getFullYear());</script> · <a class="text-gray-600 hover:text-gray-700 underline" href="javascript:void(0)">Termos e condições</a>
           </div>
 
         </div>

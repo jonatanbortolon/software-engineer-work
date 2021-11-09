@@ -24,7 +24,7 @@ export default class DashboardController {
         .groupByRaw('DATE(sales.created_at)')
         .sum('price', 'totalPrice')
         .select(Database.raw('DATE(sales.created_at) as period'))
-        .orderBy(Database.raw('DATE(sales.created_at)'), 'desc')
+        .orderBy(Database.raw('DATE(sales.created_at)'), 'asc')
         .limit(6)
     ).map((product) => {
       return { ...product.$extras }

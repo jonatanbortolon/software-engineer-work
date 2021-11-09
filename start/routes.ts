@@ -20,45 +20,59 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async ({ view }) => {
-  return view.render('welcome')
-}).as('home')
-
 Route.group(() => {
-  Route.get('/dashboard', 'DashboardController.index').as('dashboard')
-
-  Route.get('/clientes', 'ClientsController.index').as('clients.get')
-  Route.post('/clientes', 'ClientsController.store').as('clients.store')
-  Route.post('/clientes/:id', 'ClientsController.update').as('clients.update')
-  Route.post('/clientes/delete/:id', 'ClientsController.delete').as('clients.delete')
-
-  Route.get('/produtos', 'ProductsController.index').as('products.get')
-  Route.post('/produtos', 'ProductsController.store').as('products.store')
-  Route.post('/produtos/:id', 'ProductsController.update').as('products.update')
-  Route.post('/produtos/delete/:id', 'ProductsController.delete').as('products.delete')
-
-  Route.get('/vendas', 'SalesController.index').as('sales.get')
-  Route.post('/vendas', 'SalesController.store').as('sales.store')
-  Route.post('/vendas/:id', 'SalesController.update').as('sales.update')
-  Route.post('/vendas/delete/:id', 'SalesController.delete').as('sales.delete')
-
-  Route.get('/signout', 'AuthController.signoutGet').as('auth.signout')
-}).middleware(['userInfo', 'auth'])
-
-Route.group(() => {
-  Route.group(() => {
-    Route.get('/', 'AuthController.signinGet').as('get')
-    Route.post('/', 'AuthController.signinPost').as('post')
-  })
-    .prefix('/entrar')
-    .as('signin')
+  Route.get('/', async ({ view }) => {
+    return view.render('index')
+  }).as('home')
 
   Route.group(() => {
-    Route.get('/', 'AuthController.signupGet').as('get')
-    Route.post('/', 'AuthController.signupPost').as('post')
+    Route.get('/dashboard', 'DashboardController.index').as('dashboard')
+
+    Route.group(() => {
+      Route.get('/', 'ClientsController.index').as('get')
+      Route.post('/', 'ClientsController.store').as('store')
+      Route.post('/:id', 'ClientsController.update').as('update')
+      Route.post('/delete/:id', 'ClientsController.delete').as('delete')
+    })
+      .prefix('clientes')
+      .as('clients')
+
+    Route.group(() => {
+      Route.get('/', 'ProductsController.index').as('get')
+      Route.post('/', 'ProductsController.store').as('store')
+      Route.post('/:id', 'ProductsController.update').as('update')
+      Route.post('/delete/:id', 'ProductsController.delete').as('delete')
+    })
+      .prefix('produtos')
+      .as('products')
+
+    Route.group(() => {
+      Route.get('/', 'SalesController.index').as('get')
+      Route.post('/', 'SalesController.store').as('store')
+      Route.post('/:id', 'SalesController.update').as('update')
+      Route.post('/delete/:id', 'SalesController.delete').as('delete')
+    })
+      .prefix('vendas')
+      .as('sales')
+
+    Route.get('/signout', 'AuthController.signoutGet').as('auth.signout')
+  }).middleware(['userInfo', 'auth'])
+
+  Route.group(() => {
+    Route.group(() => {
+      Route.get('/', 'AuthController.signinGet').as('get')
+      Route.post('/', 'AuthController.signinPost').as('post')
+    })
+      .prefix('/entrar')
+      .as('signin')
+
+    Route.group(() => {
+      Route.get('/', 'AuthController.signupGet').as('get')
+      Route.post('/', 'AuthController.signupPost').as('post')
+    })
+      .prefix('/cadastrar')
+      .as('signup')
   })
-    .prefix('/cadastrar')
-    .as('signup')
-})
-  .as('auth')
-  .middleware('notAuth')
+    .as('auth')
+    .middleware('notAuth')
+}).middleware('silentAuth')
