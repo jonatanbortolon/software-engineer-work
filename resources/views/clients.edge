@@ -7,11 +7,11 @@
 
     <div class="w-full">
         <div class="mt-6" x-data="{ openCreate: false }">
-            <button class="px-4 py-2 mb-3 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" @click="openCreate = true">Cadastrar cliente<i class="fas fa-plus ml-2"></i></button>
+            <button class="px-4 py-2 mb-3 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openCreate = true">Cadastrar cliente<i class="fas fa-plus ml-2"></i></button>
 
             <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-show="openCreate"  >
 
-                <div class="relative top-0 mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" @click.away="openCreate = false">
+                <div class="relative top-0 mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" x-on:mousedown.away="openCreate = false">
                     <div class="mt-3 sm:mt-0 sm:text-left">
                         <form action="{{ route('clients.store') }}" method="POST">
                             <label class="block text-gray-700">
@@ -34,7 +34,7 @@
 
                     <div class="mt-2">
                         <div>
-                            <button @click="openCreate = false" type="submit" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
+                            <button x-on:click="openCreate = false" type="submit" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
                         </div>
                     </div>
                 </div>
@@ -97,10 +97,10 @@
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <div class="mt-6" x-data="{ openUpdate{{ client.id }}: false }">
-                                <button class="px-4 py-2 mb-3 text-white bg-blue-500 hover:bg-blue-600 rounded select-none no-outline focus:shadow-outline" @click="openUpdate{{ client.id }} = true"><i class="fas fa-pen"></i></button>
+                                <button class="px-4 py-2 mb-3 text-white bg-blue-500 hover:bg-blue-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openUpdate{{ client.id }} = true"><i class="fas fa-pen"></i></button>
                                 
                                 <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-show="openUpdate{{ client.id }}">
-                                    <div class="relative top-0  mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" @click.away="openUpdate{{ client.id }} = false">
+                                    <div class="relative top-0  mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" x-on:mousedown.away="openUpdate{{ client.id }} = false">
                                         <div class="mt-3 sm:mt-0 sm:text-left">
                                             <form action="{{ route('clients.update', { id: client.id }) }}" method="POST">
                                                 <label class="block text-gray-700">
@@ -123,14 +123,14 @@
                     
                                         <div class="mt-2">
                                             <div>
-                                                <button @click="openUpdate{{ client.id }} = false" type="submit" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
+                                                <button x-on:click="openUpdate{{ client.id }} = false" type="submit" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <form action="{{ route('clients.delete', { id: client.id }) }}" method="POST">
-                                <button type="submit" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" @click="openUpdate{{ client.id }} = true"><i class="fas fa-trash"></i></button>
+                                <button type="submit" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openUpdate{{ client.id }} = true"><i class="fas fa-trash"></i></button>
                             </form>
                         </td>
                     </tr>

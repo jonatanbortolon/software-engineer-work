@@ -7,10 +7,10 @@
 
     <div class="w-full">
         <div class="mt-6" x-data="{ openCreate: false }">
-            <button class="px-4 py-2 mb-3 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" @click="openCreate = true">Cadastrar venda<i class="fas fa-plus ml-2"></i></button>
+            <button class="px-4 py-2 mb-3 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openCreate = true">Cadastrar venda<i class="fas fa-plus ml-2"></i></button>
             
             <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-show="openCreate"  >
-                <div class="relative top-0  mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" @click.away="openCreate = false">
+                <div class="relative top-0  mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" x-on:mousedown.away="openCreate = false">
                     <div class="mt-3 sm:mt-0 sm:text-left">
                         <form action="{{ route('sales.store') }}" method="POST">
                             <label class="block text-gray-700">
@@ -26,41 +26,57 @@
                                 Pago
                                 <input type="checkbox" class="ml-4 mt:auto mb:auto border rounded block outline-none focus:border-blue-500" name="paidAt">
                             </label>
-                            <label class="text-gray-700 block mt-4 mb-4" x-data="{ productList: [0] }">
-                                Adicionar produtos
-                                <div class="flex flex-col md:flex-row">
-                                    <select class="appearance-none border rounded px-4 py-3 block md:w-3/5 w-full outline-none focus:border-blue-500" placeholder="Digite aqui" id="createProductProductList">
-                                        <option>Selecione um produto</option>  
-                                        @each(product in products)
-                                            <option value="{{ product.id }}">{{ product.name }}</option>  
-                                        @endeach
-                                    </select>
-                                    <label class="block text-gray-700 md:ml-2 md:mr-2 w-full mt-2 mb-2 md:mt-0 md:mb-0">
-                                        <input type="number" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500" placeholder="Quantidade do produto" id="createProductQuantityList">
-                                    </label>
-                                    <button type="button" class="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" onclick="onCreateListAdd(); return false;"><i class="fas fa-plus"></i></button>
-                                </div>
-                            </label>
-                            <table class="text-left w-full border-collapse">
-                                <thead>
-                                    <tr>
-                                        <th
-                                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Produto
-                                        </th>
-                                        <th
-                                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Quantidade
-                                        </th>
-                                        <th
-                                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Açoes
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="createProductList">
-                                </tbody>
-                            </table>
+                            <div x-data='{ productIdInputAdd: "", productQuantityInputAdd: "", addProducts: [] }'>
+                                <label class="text-gray-700 block mt-4 mb-4" x-data="{ productList: [0] }">
+                                    Adicionar produtos
+                                    <div class="flex flex-col md:flex-row">
+                                        <select class="appearance-none border rounded px-4 py-3 block md:w-3/5 w-full outline-none focus:border-blue-500" placeholder="Digite aqui" x-model="productIdInputAdd">
+                                            <option>Selecione um produto</option>  
+                                            @each(product in products)
+                                                <option value="{{ product.id }}" x-bind:style="addProducts.some(e => String(e.id) === String({{product.id}})) ? 'display:none;' : ''">{{ product.name }}</option>  
+                                            @endeach
+                                        </select>
+                                        <label class="block text-gray-700 md:ml-2 md:mr-2 w-full mt-2 mb-2 md:mt-0 md:mb-0">
+                                            <input type="number" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500" placeholder="Quantidade do produto" x-model="productQuantityInputAdd">
+                                        </label>
+                                        <button type="button" class="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="if (productIdInputAdd !== '' && productQuantityInputAdd !== '') {addProducts.push({id: productIdInputAdd, quantity: productQuantityInputAdd}); productIdInputAdd = ''; productQuantityInputAdd = '';}"><i class="fas fa-plus"></i></button>
+                                    </div>
+                                </label>
+                                <table class="text-left w-full border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Produto
+                                            </th>
+                                            <th
+                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Quantidade
+                                            </th>
+                                            <th
+                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Açoes
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template x-for="(product, index) in addProducts">
+                                            <tr class="hover:bg-grey-lighter">
+                                                <td class="py-4 px-6 border-b border-grey-light">
+                                                    <input type="number" style="display:none;" x-bind:name="'products['+index+'][id]'" required readonly x-bind:value="product.id">
+                                                    <span x-text='{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).name'></span>
+                                                </td>
+                                                <td class="py-4 px-6 border-b border-grey-light">
+                                                    <input type="number" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" x-bind:name="'products['+index+'][quantity]'" required x-bind:value="product.quantity">
+                                                </td>
+                                                <td class="py-4 px-6 border-b border-grey-light">
+                                                    <button type="button" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="addProducts.splice(index, 1);"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="mt-6">
                                 <button type="submit" class="px-4 py-3 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Cadastrar</button>
                               </div>
@@ -69,7 +85,7 @@
   
                       <div class="mt-2">
                           <div>
-                              <button @click="openCreate = false" type="submit" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
+                              <button x-on:click="openCreate = false" type="submit" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
                           </div>
                       </div>
                 </div>
@@ -100,11 +116,11 @@
                             <td class="py-4 px-6 border-b border-grey-light">{{ new Date(sale.createdAt).toLocaleDateString() }}</td>
                             <td class="py-4 px-6 border-b border-grey-light">{{ sale.client.name }}</td>
                             <td class="py-4 px-6 border-b border-grey-light">
-                                <div class="mt-6" x-data="{ openUpdate{{ sale.id }}: false }">
-                                    <button class="px-4 py-2 mb-3 text-white bg-blue-500 hover:bg-blue-600 rounded select-none no-outline focus:shadow-outline" @click="openUpdate{{ sale.id }} = true"><i class="fas fa-pen"></i></button>
+                                <div class="mt-6" x-data="{ openUpdate{{ sale.id }}: false }" x-init="$watch('openUpdate{{ sale.id }}', value => console.log(value))">
+                                    <button class="px-4 py-2 mb-3 text-white bg-blue-500 hover:bg-blue-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openUpdate{{ sale.id }} = true"><i class="fas fa-pen"></i></button>
                                     
                                     <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-show="openUpdate{{ sale.id }}">
-                                        <div class="relative top-0  mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" @click.away="openUpdate{{ sale.id }} = false">
+                                        <div class="relative top-0  mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" x-on:mousedown.away="openUpdate{{ sale.id }} = false">
                                             <div class="mt-3 sm:mt-0 sm:text-left">
                                                 <form action="{{ route('sales.update', { id: sale.id }) }}" method="POST">
                                                     <label class="block text-gray-700">
@@ -124,6 +140,57 @@
                                                         Pago
                                                         <input type="checkbox" class="ml-4 mt:auto mb:auto border rounded block outline-none focus:border-blue-500" placeholder="Digite aqui" name="paidAt" checked="{{ sale.paid }}">
                                                     </label>
+                                                    <div x-data='{ productIdInput{{sale.id}}: "", productQuantityInput{{sale.id}}: "", products{{sale.id}}: {{{JSON.stringify(sale.products.map(product => ({id:product.id,quantity:product.quantity})))}}}}'>
+                                                        <label class="text-gray-700 block mt-4 mb-4">
+                                                            Adicionar produtos
+                                                            <div class="flex flex-col md:flex-row">
+                                                                <select class="appearance-none border rounded px-4 py-3 block md:w-3/5 w-full outline-none focus:border-blue-500" placeholder="Digite aqui" x-model="productIdInput{{sale.id}}">
+                                                                    <option>Selecione um produto</option>  
+                                                                    @each(product in products)
+                                                                        <option value="{{ product.id }}" x-bind:style="products{{sale.id}}.some(e => String(e.id) === String({{product.id}})) ? 'display:none;' : ''">{{ product.name }}</option>  
+                                                                    @endeach
+                                                                </select>
+                                                                <label class="block text-gray-700 md:ml-2 md:mr-2 w-full mt-2 mb-2 md:mt-0 md:mb-0">
+                                                                    <input type="number" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500" placeholder="Quantidade do produto" x-model="productQuantityInput{{sale.id}}">
+                                                                </label>
+                                                                <button type="button" class="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="if (productIdInput{{sale.id}} !== '' && productQuantityInput{{sale.id}} !== '') {products{{sale.id}}.push({id: productIdInput{{sale.id}}, quantity: productQuantityInput{{sale.id}}});  productIdInput{{sale.id}} = ''; productQuantityInput{{sale.id}} = '';}"><i class="fas fa-plus"></i></button>
+                                                            </div>
+                                                        </label>
+                                                        <table class="text-left w-full border-collapse">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th
+                                                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                                        Produto
+                                                                    </th>
+                                                                    <th
+                                                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                                        Quantidade
+                                                                    </th>
+                                                                    <th
+                                                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                                        Açoes
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <template x-for="(product, index) in products{{sale.id}}">
+                                                                    <tr class="hover:bg-grey-lighter">
+                                                                        <td class="py-4 px-6 border-b border-grey-light">
+                                                                            <input type="number" style="display:none;" x-bind:name="'products['+index+'][id]'" required readonly x-bind:value="product.id">
+                                                                            <span x-text='{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).name'></span>
+                                                                        </td>
+                                                                        <td class="py-4 px-6 border-b border-grey-light">
+                                                                            <input type="number" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" x-bind:name="'products['+index+'][quantity]'" required x-bind:value="product.quantity">
+                                                                        </td>
+                                                                        <td class="py-4 px-6 border-b border-grey-light">
+                                                                            <button type="button" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="products{{sale.id}}.splice(index, 1);"><i class="fas fa-trash"></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                     <div class="mt-6">
                                                         <button type="submit" class="px-4 py-3 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
                                                     </div>
@@ -132,14 +199,14 @@
                         
                                             <div class="mt-2">
                                                 <div>
-                                                    <button @click="openUpdate{{ sale.id }} = false" type="submit" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
+                                                    <button x-on:click="openUpdate{{ sale.id }} = false" type="button" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <form action="{{ route('sales.delete', { id: sale.id }) }}" method="POST">
-                                    <button type="submit" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" @click="openUpdate{{ sale.id }} = true"><i class="fas fa-trash"></i></button>
+                                    <button type="submit" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openUpdate{{ sale.id }} = true"><i class="fas fa-trash"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -149,55 +216,4 @@
         </div>
     </div>
 </main>
-<script>
-    const productList = ({{{JSON.stringify(products)}}});
-
-    const createModalList = document.getElementById('createProductList');
-
-    const createModalListArray = [];
-
-    const createModalProductList = document.getElementById('createProductProductList');
-    const createModalQuantityList = document.getElementById('createProductQuantityList');
-
-    function onCreateListAdd() {
-        if (!createModalProductList.value || !createModalQuantityList.value) return;
-
-        createModalListArray.push({id:createModalProductList.value, quantity:createModalQuantityList.value});
-
-        createModalProductList.value = "";
-        createModalQuantityList.value = "";
-
-        createListRender();
-    }
-
-    function createListRemove(index = null) {
-        if (index !== null) {
-            createModalListArray.splice(index, 1);
-            
-            createListRender();
-        }
-    }
-
-    function createListRender() {
-        createModalList.innerHTML = '';
-
-        createModalListArray.forEach((product, index) => {
-            createModalList.insertAdjacentHTML("beforeend", 
-            `
-            <tr class="hover:bg-grey-lighter">
-                <td class="py-4 px-6 border-b border-grey-light">
-                    <input type="number" style="display:none;" name="products[${index}][id]" required readonly value="${product.id}">
-                    ${productList.find(productFind => String(productFind.id) === String(product.id)).name}
-                </td>
-                <td class="py-4 px-6 border-b border-grey-light">
-                    <input type="number" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" name="products[${index}][quantity]" required readonly value="${product.quantity}">
-                </td>
-                <td class="py-4 px-6 border-b border-grey-light">
-                    <button type="button" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" onclick="createListRemove(${index}); return false;"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-            `)
-        })
-    }
-</script>
 @endsection

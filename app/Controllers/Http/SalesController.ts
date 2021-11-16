@@ -87,15 +87,16 @@ export default class SalesController {
 
   public async update({ request, response, params }: HttpContextContract) {
     try {
+      console.log(request.input('products'))
       const Schema = schema.create({
         paidAt: schema.boolean.optional(),
         clientId: schema.number([rules.required()]),
-        // products: schema.array([rules.required(), rules.minLength(0)]).members(
-        //   schema.object().members({
-        //     id: schema.number([rules.required()]),
-        //     quantity: schema.number([rules.required()]),
-        //   })
-        // ),
+        products: schema.array([rules.required(), rules.minLength(0)]).members(
+          schema.object().members({
+            id: schema.number([rules.required()]),
+            quantity: schema.number([rules.required()]),
+          })
+        ),
       })
 
       await request.validate({
@@ -121,7 +122,7 @@ export default class SalesController {
 
       await sale
         .related('products')
-        .attach(
+        .sync(
           products.reduce(
             (carry, product) => ((carry[product.id] = { quantity: product.quantity }), carry),
             {}
