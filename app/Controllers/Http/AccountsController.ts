@@ -3,6 +3,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Account from 'App/Models/Account'
 import SignupLink from 'App/Models/SignupLink'
 import User from 'App/Models/User'
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class AccountsController {
   public async index({ view, auth }: HttpContextContract) {
@@ -16,6 +17,7 @@ export default class AccountsController {
     const accounts = await User.query().withScopes((scope) => scope.accountScope(auth.user!.id))
 
     return view.render('accounts', {
+      baseUrl: Env.get('BASE_URL'),
       link: link,
       accounts: accounts,
     })
