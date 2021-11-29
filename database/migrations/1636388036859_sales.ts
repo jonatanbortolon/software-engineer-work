@@ -10,7 +10,7 @@ export default class Sales extends BaseSchema {
         .enum('payment', ['M', 'DC', 'CC'], {
           useNative: true,
           enumName: 'payment_type',
-          existingType: false,
+          existingType: true,
         })
         .defaultTo('M')
 
