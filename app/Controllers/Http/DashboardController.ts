@@ -11,7 +11,11 @@ export default class DashboardController {
     }
 
     const productsChart = Object.entries(
-      (await Sale.query().preload('products')).reduce((carry, sale) => {
+      (
+        await Sale.query()
+          .withScopes((scope) => scope.accountScope(auth.user!.accountId))
+          .preload('products')
+      ).reduce((carry, sale) => {
         for (const product of Object.keys(sale.$extras.totalProducts)) {
           if (!carry[product]) {
             if (Object.keys(carry).length < 10) {
@@ -30,6 +34,7 @@ export default class DashboardController {
 
     const billingsChart = (
       await Sale.query()
+        .withScopes((scope) => scope.accountScope(auth.user!.accountId))
         .preload('products')
         .whereBetween('created_at', [
           DateTime.now().plus({ months: -10 }).toISO(),
@@ -57,6 +62,7 @@ export default class DashboardController {
 
     const clientsChart = (
       await Client.query()
+        .withScopes((scope) => scope.accountScope(auth.user!.accountId))
         .preload('sales', (sales) => sales.preload('products'))
         .limit(10)
     )

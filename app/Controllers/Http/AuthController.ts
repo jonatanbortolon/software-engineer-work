@@ -210,7 +210,7 @@ export default class AuthController {
         return response.redirect().back()
       }
 
-      const user = await User.query().whereNull('parent_id').firstOrFail()
+      const user = await User.findOrFail(params.id)
 
       user.delete()
 
