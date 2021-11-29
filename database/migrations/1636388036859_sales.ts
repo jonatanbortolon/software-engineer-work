@@ -6,7 +6,6 @@ export default class Sales extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.dropColumn('paid_at')
       table
         .enum('payment', ['M', 'DC', 'CC'], {
           useNative: true,
