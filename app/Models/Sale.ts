@@ -69,7 +69,8 @@ export default class Sale extends compose(BaseModel, SoftDeletes) {
   public static async getTotalFetch(sales: Sale[]) {
     for (const sale of sales) {
       sale.load('products')
-      const total = await sale.products.reduce((carry, product) => {
+
+      const total = await sale.products?.reduce((carry, product) => {
         const productTotal = product.price * product.$extras.pivot_quantity
 
         return carry + productTotal
@@ -97,7 +98,7 @@ export default class Sale extends compose(BaseModel, SoftDeletes) {
 
       let products = {}
 
-      for (const product of sale.products) {
+      for (const product of sale.products ?? []) {
         products[product.name] = product.$extras.pivot_quantity
       }
 
@@ -109,7 +110,7 @@ export default class Sale extends compose(BaseModel, SoftDeletes) {
   public static async getTotalFind(sale: Sale) {
     sale.load('products')
 
-    const total = await sale.products.reduce((carry, product) => {
+    const total = await sale.products?.reduce((carry, product) => {
       const productTotal = product.price * product.$extras.pivot_quantity
 
       return carry + productTotal
@@ -135,7 +136,7 @@ export default class Sale extends compose(BaseModel, SoftDeletes) {
 
     let products = {}
 
-    for (const product of sale.products) {
+    for (const product of sale.products ?? []) {
       products[product.name] = product.$extras.pivot_quantity
     }
 
