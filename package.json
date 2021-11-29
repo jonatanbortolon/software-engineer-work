@@ -39,6 +39,7 @@
     "adonis5-scheduler": "^2.0.2",
     "luxon": "^2.0.2",
     "mysql": "^2.18.1",
+    "pg": "^8.7.1",
     "phc-argon2": "^1.1.2",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
