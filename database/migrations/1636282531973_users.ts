@@ -10,6 +10,16 @@ export default class UsersSchema extends BaseSchema {
       table.string('email', 255).notNullable()
       table.string('password', 180).notNullable()
       table.string('remember_me_token').nullable()
+      table
+        .enum('role', ['ADMIN', 'SALESMAN', 'STOCKIST'], {
+          useNative: true,
+          enumName: 'user_account_role',
+          existingType: true,
+        })
+        .defaultTo('ADMIN')
+      table.string('phone').nullable()
+
+      table.integer('account_id').unsigned().references('accounts.id').onDelete('cascade')
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL

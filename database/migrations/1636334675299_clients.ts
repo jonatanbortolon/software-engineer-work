@@ -9,6 +9,7 @@ export default class Clients extends BaseSchema {
       table.string('name').notNullable()
       table.string('phone').nullable()
       table.string('email').nullable()
+      table.string('document').nullable()
 
       table.integer('account_id').unsigned().references('accounts.id')
 

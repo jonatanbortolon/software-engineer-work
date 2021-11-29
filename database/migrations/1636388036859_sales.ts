@@ -6,7 +6,16 @@ export default class Sales extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.timestamp('paid_at', { useTz: true }).nullable()
+      table.dropColumn('paid_at')
+      table
+        .enum('payment', ['M', 'DC', 'CC'], {
+          useNative: true,
+          enumName: 'payment_type',
+          existingType: false,
+        })
+        .defaultTo('M')
+
+      table.integer('salesman_id').unsigned().references('users.id').onDelete('cascade')
 
       table.integer('account_id').unsigned().references('accounts.id')
       table.integer('client_id').unsigned().references('clients.id')

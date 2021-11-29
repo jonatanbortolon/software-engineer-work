@@ -7,7 +7,6 @@ export default class Products extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.string('name').notNullable()
-      table.integer('stock').notNullable()
       table.integer('price').notNullable()
 
       table.integer('account_id').unsigned().references('accounts.id')
