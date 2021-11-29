@@ -8,7 +8,7 @@ export default class UsersSchema extends BaseSchema {
       table
         .enum('role', ['ADMIN', 'SALESMAN', 'STOCKIST'], {
           useNative: true,
-          enumName: 'user_role',
+          enumName: 'user_account_role',
           existingType: false,
         })
         .defaultTo('ADMIN')
