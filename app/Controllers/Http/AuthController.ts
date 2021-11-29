@@ -205,12 +205,12 @@ export default class AuthController {
 
       await auth.use('web').user!.load('account')
 
-      if (auth.use('web').user!.account.userId === auth.use('web').user!.id) {
+      const user = await User.findOrFail(params.id)
+
+      if (auth.use('web').user!.account.userId === user.id) {
         session.flash('error', 'Você não pode excluir esse usuário!')
         return response.redirect().back()
       }
-
-      const user = await User.findOrFail(params.id)
 
       user.delete()
 
