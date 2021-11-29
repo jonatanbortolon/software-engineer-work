@@ -10,38 +10,38 @@
     </div>
     <nav class="text-white text-base font-semibold">
         @if(user.role === 'ADMIN')
-        <a href="{{ route('dashboard.get') }}" class="w-full flex items-center {{menuActive === 'dashboard' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('dashboard.get') }}" class="w-full flex items-center {{menuActive === 'dashboard' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-tachometer-alt m-1 {{menuActive === 'dashboard' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Dashboard' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
         @if(user.role === 'ADMIN' || user.role === 'SALESMAN')
-        <a href="{{ route('clients.get') }}" class="w-full flex items-center {{menuActive === 'clients' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('clients.get') }}" class="w-full flex items-center {{menuActive === 'clients' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-user m-1 {{menuActive === 'clients' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Clientes' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
         @if(user.role === 'ADMIN' || user.role === 'STOCKIST')
-        <a href="{{ route('products.get') }}" class="w-full flex items-center {{menuActive === 'products' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('products.get') }}" class="w-full flex items-center {{menuActive === 'products' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-box-open m-1 {{menuActive === 'products' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Produtos' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
         @if(user.role === 'ADMIN' || user.role === 'SALESMAN')
-        <a href="{{ route('sales.get') }}" class="w-full flex items-center {{menuActive === 'sales' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('sales.get') }}" class="w-full flex items-center {{menuActive === 'sales' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-cash-register m-1 {{menuActive === 'sales' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Vendas' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
         @if(user.role === 'ADMIN')
-        <a href="{{ route('accounts.get') }}" class="w-full flex items-center {{menuActive === 'accounts' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('accounts.get') }}" class="w-full flex items-center {{menuActive === 'accounts' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-users m-1 {{menuActive === 'accounts' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Contas' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
     </nav>
     <div class="h-full"></div>
-    <button type="button" class="w-full flex items-center text-dark-gray dark:text-white py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'" x-on:click="dark = !dark">
+    <button type="button" class="w-full flex items-center text-dark-gray dark:text-white py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'" x-on:click="dark = !dark">
         <i x-cloak x-show="dark" class="m-1 fas fa-moon"></i>
         <i x-cloak x-show="!dark" class="m-1 fas fa-sun"></i>
         <span class="whitespace-nowrap" x-bind:class="drawer ? 'ml-3' : ''" x-text="drawer ? 'Modo escuro' : ''"></span>
