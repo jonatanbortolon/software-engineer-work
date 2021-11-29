@@ -13,7 +13,7 @@ export default class SignupLinks extends BaseSchema {
       table
         .enum('role', ['ADMIN', 'SALESMAN', 'STOCKIST'], {
           useNative: true,
-          enumName: 'user_role',
+          enumName: 'user_link_role',
           existingType: false,
         })
         .defaultTo('ADMIN')
