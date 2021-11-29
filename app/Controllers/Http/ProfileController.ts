@@ -53,6 +53,7 @@ export default class ProfilesController {
       session.flash('success', 'Perfil alterado!')
       return response.redirect().back()
     } catch (e) {
+      console.log(JSON.stringify(e))
       session.flash('error', e)
       return response.redirect().back()
     }

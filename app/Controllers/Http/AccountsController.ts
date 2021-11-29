@@ -61,6 +61,7 @@ export default class AccountsController {
       session.flash('success', 'Perfil da empresa alterado!')
       return response.redirect().back()
     } catch (e) {
+      console.log(JSON.stringify(e))
       session.flash('error', e)
       return response.redirect().back()
     }
