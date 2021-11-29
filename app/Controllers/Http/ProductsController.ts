@@ -64,7 +64,7 @@ export default class ProductsController {
       session.flash('success', 'Produto cadastrado!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }
@@ -109,7 +109,7 @@ export default class ProductsController {
       session.flash('success', 'Produto alterado!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }
@@ -134,7 +134,7 @@ export default class ProductsController {
       session.flash('success', 'Produto removido!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }

@@ -51,7 +51,7 @@ export default class ClientsController {
       session.flash('success', 'Cliente cadastrado!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }
@@ -99,7 +99,7 @@ export default class ClientsController {
       session.flash('success', 'Cliente alterado!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }
@@ -124,7 +124,7 @@ export default class ClientsController {
       session.flash('success', 'Cliente removido!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }

@@ -144,7 +144,7 @@ export default class SalesController {
       session.flash('success', 'Venda cadastrada!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }
@@ -227,7 +227,7 @@ export default class SalesController {
       session.flash('success', 'Venda removida!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }

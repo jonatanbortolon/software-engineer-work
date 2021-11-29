@@ -33,7 +33,7 @@ export default class StocksController {
       session.flash('success', 'Estoque cadastrado!')
       return response.redirect().back()
     } catch (e) {
-      console.log(JSON.stringify(e))
+      console.log(e.toString())
       session.flash('error', e)
       return response.redirect().back()
     }
