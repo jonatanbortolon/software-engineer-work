@@ -34,7 +34,10 @@ export default class ProfilesController {
 
       const user = auth.use('web').user!
 
-      if (!!(await User.query().where('email', email).first())) {
+      if (
+        email !== auth.use('web').user!.email &&
+        !!(await User.query().where('email', email).first())
+      ) {
         session.flash('error', 'Email em uso!')
         return response.redirect().back()
       }
