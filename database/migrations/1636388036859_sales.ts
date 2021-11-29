@@ -8,9 +8,8 @@ export default class Sales extends BaseSchema {
       table.increments('id')
       table.timestamp('paid_at', { useTz: true }).nullable()
 
-      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
-      table.integer('client_id').unsigned().references('clients.id').onDelete('CASCADE')
-
+      table.integer('account_id').unsigned().references('accounts.id')
+      table.integer('client_id').unsigned().references('clients.id')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
@@ -21,6 +20,11 @@ export default class Sales extends BaseSchema {
   }
 
   public async down() {
+    this.schema.table('sales', (table) => {
+      table.dropForeign('account_id')
+      table.dropForeign('client_id')
+    })
+
     this.schema.dropTable(this.tableName)
   }
 }

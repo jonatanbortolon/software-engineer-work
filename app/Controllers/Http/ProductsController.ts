@@ -3,20 +3,49 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Product from 'App/Models/Product'
 
 export default class ProductsController {
-  public async index({ view, auth }: HttpContextContract) {
-    const products = await Product.query().withScopes((scopes) => scopes.userScope(auth.user!.id))
+  public async index({ response, view, auth, session }: HttpContextContract) {
+    if (auth.user!.role !== 'ADMIN' && auth.user!.role !== 'STOCKIST') {
+      session.flash('error', 'Você não tem permissão!')
+      return response.redirect().back()
+    }
+
+    const products = (
+      await Product.query()
+        .withScopes((scopes) => scopes.accountScope(auth.user!.accountId))
+        .withAggregate('stocks', (query) => {
+          query.where('type', 'INCREASE').sum('quantity').as('sumStock')
+        })
+        .withAggregate('stocks', (query) => {
+          query.where('type', 'DECREASE').sum('quantity').as('subStock')
+        })
+        .preload('stocks')
+    ).map((product) => {
+      return {
+        ...product.$attributes,
+        formattedPrice: product.formattedPrice,
+        stocks: [...product.stocks],
+        stock: product.$extras.sumStock - product.$extras.subStock,
+      }
+    })
 
     return view.render('products', {
       products: products,
     })
   }
 
-  public async store({ request, response, auth }: HttpContextContract) {
+  public async store({ request, response, auth, session }: HttpContextContract) {
     try {
+      if (auth.user!.role !== 'ADMIN' && auth.user!.role !== 'STOCKIST') {
+        session.flash('error', 'Você não tem permissão!')
+        return response.redirect().back()
+      }
+
       const Schema = schema.create({
         name: schema.string({}, [rules.required()]),
-        stock: schema.number([rules.required()]),
-        price: schema.number([rules.required()]),
+        price: schema.string({}, [
+          rules.required(),
+          rules.regex(/^(?!0\,00)[1-9]\d{0,2}(\.\d{3})*(\,\d\d)?$/),
+        ]),
       })
 
       await request.validate({
@@ -24,30 +53,35 @@ export default class ProductsController {
       })
 
       const name = request.input('name')
-      const stock = request.input('stock')
       const price = request.input('price')
 
       await Product.create({
         name: name,
-        stock: stock,
         price: price,
-        userId: auth.use('web').user!.id,
+        accountId: auth.use('web').user!.accountId,
       })
 
+      session.flash('success', 'Produto cadastrado!')
       return response.redirect().back()
     } catch (e) {
-      console.log(e)
-
+      session.flash('error', e)
       return response.redirect().back()
     }
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
+  public async update({ request, response, auth, params, session }: HttpContextContract) {
     try {
+      if (auth.user!.role !== 'ADMIN' && auth.user!.role !== 'STOCKIST') {
+        session.flash('error', 'Você não tem permissão!')
+        return response.redirect().back()
+      }
+
       const Schema = schema.create({
         name: schema.string({}, [rules.required()]),
-        stock: schema.number([rules.required()]),
-        price: schema.number([rules.required()]),
+        price: schema.string({}, [
+          rules.required(),
+          rules.regex(/^(?!0\,00)[1-9]\d{0,2}(\.\d{3})*(\,\d\d)?$/),
+        ]),
       })
 
       await request.validate({
@@ -55,11 +89,11 @@ export default class ProductsController {
       })
 
       if (!params.id) {
+        session.flash('error', 'Forneça um produto!')
         return response.redirect().back()
       }
 
       const name = request.input('name')
-      const stock = request.input('stock')
       const price = request.input('price')
 
       const product = await Product.findOrFail(params.id)
@@ -67,21 +101,27 @@ export default class ProductsController {
       await product
         .merge({
           name: name,
-          stock: stock,
           price: price,
         })
         .save()
 
+      session.flash('success', 'Produto alterado!')
       return response.redirect().back()
     } catch (e) {
-      console.log(e)
+      session.flash('error', e)
       return response.redirect().back()
     }
   }
 
-  public async delete({ response, params }: HttpContextContract) {
+  public async delete({ response, auth, params, session }: HttpContextContract) {
     try {
+      if (auth.user!.role !== 'ADMIN') {
+        session.flash('error', 'Você não tem permissão!')
+        return response.redirect().back()
+      }
+
       if (!params.id) {
+        session.flash('error', 'Forneça um produto!')
         return response.redirect().back()
       }
 
@@ -89,8 +129,10 @@ export default class ProductsController {
 
       product.delete()
 
+      session.flash('success', 'Produto removido!')
       return response.redirect().back()
     } catch (e) {
+      session.flash('error', e)
       return response.redirect().back()
     }
   }

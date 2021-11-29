@@ -1,60 +1,78 @@
 <!-- Desktop Header -->
-<header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
+<header class="w-full items-center bg-white dark:bg-dark-light py-2 px-6 hidden sm:flex">
     <div class="w-1/2"></div>
-    <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
-        <button x-on:click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden focus:outline-none">
+    <div x-data="{ headerOpen: false }" class="relative w-1/2 flex justify-end" x-on:mousedown.away="headerOpen = false">
+        <button x-on:click="headerOpen = !headerOpen" class="relative z-10 w-12 h-12 rounded-full overflow-hidden focus:outline-none">
             <img src="https://avatars.dicebear.com/api/initials/{{ user.name }}.svg">
         </button>
-        <button x-show="isOpen" x-on:click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
-        <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-            <a href="#" class="block px-4 py-2 account-link hover:text-gray-400">Minha conta</a>
-            <a href="#" class="block px-4 py-2 account-link hover:text-gray-400">Suporte</a>
-            <a href="{{ route('auth.signout') }}" class="block px-4 py-2 account-link hover:text-gray-400">Sair</a>
+        <div x-cloak x-show="headerOpen" class="absolute w-32 bg-white dark:bg-dark-light rounded-lg shadow-lg py-2 mt-16">
+            <a href="{{ route('myprofile.get') }}" class="block px-4 py-2 account-link dark:text-gray-400 hover:text-gray-400 dark:hover:text-white whitespace-nowrap">Meu perfil</a>
+            <a href="#" class="block px-4 py-2 account-link dark:text-gray-400 hover:text-gray-400 dark:hover:text-white">Suporte</a>
+            <a href="{{ route('auth.signout.get') }}" class="block px-4 py-2 account-link dark:text-gray-400 hover:text-gray-400 dark:hover:text-white">Sair</a>
         </div>
     </div>
 </header>
 
 <!-- Mobile Header & Nav -->
-<header x-data="{ isOpen: false }" class="w-full bg-primary-400 py-5 px-6 sm:hidden">
+<header x-data="{ headerOpen: false }" class="w-full bg-primary-400 dark:bg-dark-light py-5 px-6 sm:hidden">
     <div class="flex items-center justify-between">
-        <a class="text-white text-3xl font-semibold uppercase">Gestaco</a>
-        <button x-on:click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
-            <i x-show="!isOpen" class="fas fa-bars"></i>
-            <i x-show="isOpen" class="fas fa-times"></i>
+        <a class="text-white dark:text-primary-400 text-3xl font-semibold uppercase">Gestaco</a>
+        <button x-on:click="headerOpen = !headerOpen" class="text-white text-3xl focus:outline-none">
+            <i x-cloak x-show="!headerOpen" class="fas fa-bars"></i>
+            <i x-cloak x-show="headerOpen" class="fas fa-times"></i>
         </button>
     </div>
 
-    <nav x-bind:class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
-        <a href="{{ route('dashboard') }}" class="flex items-center {{menuActive === 'dashboard' ? 'active-nav-link' : 'opacity-75 hover:opacity-100'}} text-white py-2 pl-4 nav-item">
+    <nav x-bind:class="headerOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
+        @if(user.role === 'ADMIN')
+        <a href="{{ route('dashboard.get') }}" class="flex items-center {{menuActive === 'dashboard' ? 'active-nav-link' : 'opacity-75 hover:opacity-100'}} text-white py-2 pl-4 nav-item">
             <i class="fas fa-tachometer-alt mr-3"></i>
             Dashboard
         </a>
+        @endif
+        @if(user.role === 'ADMIN' || user.role === 'SALESMAN')
         <a href="{{ route('clients.get') }}" class="flex items-center {{menuActive === 'clients' ? 'active-nav-link' : 'opacity-75 hover:opacity-100'}} text-white py-2 pl-4 nav-item">
             <i class="fas fa-user mr-3"></i>
             Clientes
         </a>
+        @endif
+        @if(user.role === 'ADMIN' || user.role === 'STOCKIST')
         <a href="{{ route('products.get') }}" class="flex items-center {{menuActive === 'products' ? 'active-nav-link' : 'opacity-75 hover:opacity-100'}} text-white py-2 pl-4 nav-item">
             <i class="fas fa-box-open mr-3"></i>
             Produtos
         </a>
+        @endif
+        @if(user.role === 'ADMIN' || user.role === 'SALESMAN')
         <a href="{{ route('sales.get') }}" class="flex items-center {{menuActive === 'sales' ? 'active-nav-link' : 'opacity-75 hover:opacity-100'}} text-white py-2 pl-4 nav-item">
             <i class="fas fa-cash-register mr-3"></i>
             Vendas
         </a>
-        <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+        @endif
+        @if(user.role === 'ADMIN')
+        <a href="{{ route('accounts.get') }}" class="flex items-center {{menuActive === 'sales' ? 'active-nav-link' : 'opacity-75 hover:opacity-100'}} text-white py-2 pl-4 nav-item">
+            <i class="fas fa-users mr-3"></i>
+            Contas
+        </a>
+        @endif
+        <a href="{{ route('myprofile.get') }}" class="flex items-center {{menuActive === 'myprofile' ? 'active-nav-link' : 'opacity-75 hover:opacity-100'}} text-white py-2 pl-4 nav-item">
             <i class="fas fa-user mr-3"></i>
-            Minha conta
+            Meu perfil
         </a>
         <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
             <i class="fas fa-cogs mr-3"></i>
             Suporte
         </a>
-        <a href="{{ route('auth.signout') }}"  class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+        <a href="{{ route('auth.signout.get') }}"  class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
             <i class="fas fa-sign-out-alt mr-3"></i>
             Sair
         </a>
+        <button type="button" class="flex items-center text-white py-2 pl-4 nav-item mt-10" x-on:click="dark = !dark">
+            <i x-cloak x-show="dark" class="fas fa-moon mr-3"></i>
+            <i x-cloak x-show="!dark" class="fas fa-sun mr-3"></i>
+            Modo escuro
+        </button>
     </nav>
-    <a href="{{ route('sales.get') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+    {{--  <a href="{{ route('sales.get') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
         <i class="fas fa-plus mr-3"></i> Nova venda
-    </a>
+    </a>  --}}
 </header>

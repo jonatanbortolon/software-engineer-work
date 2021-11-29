@@ -18,9 +18,27 @@ export default class UsersSchema extends BaseSchema {
       table.timestamp('updated_at', { useTz: true }).notNullable()
       // table.timestamp('deleted_at', { useTz: true })
     })
+
+    this.schema.table('accounts', (table) => {
+      table
+        .integer('user_id')
+        .unsigned()
+        .references('users.id')
+        .nullable()
+        .onDelete('cascade')
+        .alter()
+    })
   }
 
   public async down() {
+    this.schema.table('accounts', (table) => {
+      table.dropForeign('user_id')
+    })
+
+    this.schema.table('users', (table) => {
+      table.dropForeign('account_id')
+    })
+
     this.schema.dropTable(this.tableName)
   }
 }

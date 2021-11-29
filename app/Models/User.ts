@@ -1,8 +1,19 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  column,
+  beforeSave,
+  BaseModel,
+  hasMany,
+  HasMany,
+  scope,
+  computed,
+  BelongsTo,
+  belongsTo,
+} from '@ioc:Adonis/Lucid/Orm'
 import Client from './Client'
 import Product from './Product'
+import Account from './Account'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -12,6 +23,9 @@ export default class User extends BaseModel {
   public name: string
 
   @column()
+  public phone: string
+
+  @column()
   public email: string
 
   @column({ serializeAs: null })
@@ -19,6 +33,12 @@ export default class User extends BaseModel {
 
   @column()
   public rememberMeToken?: string
+
+  @column()
+  public accountId: number
+
+  @column()
+  public role: 'ADMIN' | 'SALESMAN' | 'STOCKIST'
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -31,6 +51,34 @@ export default class User extends BaseModel {
 
   @hasMany(() => Product)
   public products: HasMany<typeof Product>
+
+  @belongsTo(() => Account)
+  public account: BelongsTo<typeof Account>
+
+  public static accountScope = scope((query, account: number) => {
+    query.where('account_id', account)
+  })
+
+  @computed()
+  public get formattedPhone() {
+    if (this.phone) {
+      const formatted = this.phone
+        .replace(/\D/g, '')
+        .replace(/^(\d{2})(\d)/g, '($1) $2')
+        .replace(/(\d)(\d{4})$/, '$1-$2')
+
+      return formatted
+    } else {
+      return null
+    }
+  }
+
+  @beforeSave()
+  public static async formatPhoneSave(client: Client) {
+    if (client.$dirty.phone) {
+      client.phone = client.phone.replace(/\D+/g, '').replace(/\s/g, '')
+    }
+  }
 
   @beforeSave()
   public static async hashPassword(user: User) {

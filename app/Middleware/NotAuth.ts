@@ -45,6 +45,11 @@ export default class NotAuthMiddleware {
         /**
          * Unable to authenticate using any guard
          */
+
+        if (auth.user!.role === 'SALESMAN') this.redirectTo = '/vendas'
+
+        if (auth.user!.role === 'STOCKIST') this.redirectTo = '/produtos'
+
         throw new AuthenticationException(
           'Unauthorized access',
           'E_UNAUTHORIZED_ACCESS',

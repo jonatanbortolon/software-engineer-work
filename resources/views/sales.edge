@@ -1,91 +1,152 @@
 @layout('layouts/masterauth')
-@set('title', 'Minhas vendas')
+@set('title', 'GESTACO - Minhas vendas')
 @set('menuActive', 'sales')
 @section('content')
 <main class="w-full flex-grow p-6">
-    <h1 class="text-3xl text-black pb-6">Vendas</h1>
+    <h1 class="text-3xl text-black dark:text-white pb-6">Vendas</h1>
 
     <div class="w-full">
         <div class="mt-6" x-data="{ openCreate: false }">
-            <button class="px-4 py-2 mb-3 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openCreate = true">Cadastrar venda<i class="fas fa-plus ml-2"></i></button>
+            <button type="button" class="px-4 py-2 mb-3 text-white dark:text-dark-dark bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openCreate = true">Cadastrar venda<i class="fas fa-plus ml-2"></i></button>
             
-            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-show="openCreate"  >
-                <div class="relative top-0  mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" x-on:mousedown.away="openCreate = false">
+            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openCreate">
+                <div class="relative top-0 mx-auto p-5 border dark:border-none h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white dark:bg-dark-dark" x-on:mousedown.away="openCreate = false">
                     <div class="mt-3 sm:mt-0 sm:text-left">
-                        <form action="{{ route('sales.store') }}" method="POST">
-                            <label class="block text-gray-700">
+                        <form action="{{ route('sales.store') }}" method="POST" x-data="{ saleCreateClient: false }">
+                            <input class="hidden" name="createClient" x-model="saleCreateClient">
+                            <label class="block text-gray-700 dark:text-white mb-4">
                                 Cliente
-                                <select class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" placeholder="Digite aqui" name="clientId" required>
-                                    <option>Selecione um cliente</option>  
-                                    @each(client in clients)
-                                        <option value="{{ client.id }}">{{ client.name }}</option>  
-                                    @endeach
+                                <div x-cloak x-show="!saleCreateClient" class="flex flex-col md:flex-row">
+                                    <select class="appearance-none border rounded px-4 py-3 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="clientId" x-bind:required="!saleCreateClient">
+                                        <option value="">Selecione um cliente</option>  
+                                        @each(client in clients)
+                                            <option value="{{ client.id }}">{{ client.name }}</option>  
+                                        @endeach
+                                    </select>
+                                    <button type="button" class="px-5 py-2 text-white dark:text-dark-dark bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline md:ml-2 mt-2 md:mt-0" x-on:click="saleCreateClient = true"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </label>
+                            <div x-cloak x-show="saleCreateClient">
+                                <label class="block text-gray-700 dark:text-white mb-4">
+                                    Nome
+                                    <input type="text" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="client.name" x-bind:required="saleCreateClient">
+                                </label>
+                                <label class="block text-gray-700 dark:text-white mb-4">
+                                    Telefone
+                                    <input type="text" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="client.phone" id="addphone">
+                                </label>
+                                <label class="block text-gray-700 dark:text-white mb-4">
+                                    CPF
+                                    <input type="text" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="client.document" id="adddocument">
+                                </label>
+                                <label class="block text-gray-700 dark:text-white mb-4">
+                                    Email
+                                    <input type="email" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="client.email">
+                                </label>
+                                <button x-on:click="saleCreateClient = false" type="button" class="px-4 py-3 bg-red-600 text-white dark:text-dark-dark rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Cancelar</button>
+                            </div>
+                            <label class="block text-gray-700 dark:text-white mb-4">
+                                Método de pagamento
+                                <select class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="payment">
+                                    <option>Selecione uma forma de pagamento</option>  
+                                    <option value="M">Dinheiro</option>
+                                    <option value="DC">Cartão de débito</option>
+                                    <option value="CC">Cartão de crédito</option>
                                 </select>
                             </label>
-                            <label class="flex flex-row items-center text-gray-700 mt-4">
-                                Pago
-                                <input type="checkbox" class="ml-4 mt:auto mb:auto border rounded block outline-none focus:border-blue-500" name="paidAt">
-                            </label>
-                            <div x-data='{ productIdInputAdd: "", productQuantityInputAdd: "", addProducts: [] }'>
-                                <label class="text-gray-700 block mt-4 mb-4" x-data="{ productList: [0] }">
+                            <div x-data='{ productIdInputAdd: "", productQuantityInputAdd: "0", addProducts: [] }'>
+                                <label class="text-gray-700 dark:text-white block mt-4 mb-4">
                                     Adicionar produtos
                                     <div class="flex flex-col md:flex-row">
-                                        <select class="appearance-none border rounded px-4 py-3 block md:w-3/5 w-full outline-none focus:border-blue-500" placeholder="Digite aqui" x-model="productIdInputAdd">
+                                        <select class="appearance-none border rounded px-4 py-3 block md:w-3/5 w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" placeholder="Digite aqui" x-model="productIdInputAdd" x-on:change='if($event.target.value) if(productQuantityInputAdd > {{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String($event.target.value))?.stock) productQuantityInputAdd = {{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String($event.target.value))?.stock;'>
                                             <option>Selecione um produto</option>  
                                             @each(product in products)
-                                                <option value="{{ product.id }}" x-bind:style="addProducts.some(e => String(e.id) === String({{product.id}})) ? 'display:none;' : ''">{{ product.name }}</option>  
+                                                @if(product.stock > 0)
+                                                <option value="{{ product.id }}" x-bind:class="addProducts.some(e => String(e.id) === String({{product.id}})) ? 'hidden' : ''">{{ product.name }}</option>
+                                                @endif
                                             @endeach
                                         </select>
-                                        <label class="block text-gray-700 md:ml-2 md:mr-2 w-full mt-2 mb-2 md:mt-0 md:mb-0">
-                                            <input type="number" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500" placeholder="Quantidade do produto" x-model="productQuantityInputAdd">
+                                        <label class="block text-gray-700 dark:text-white md:ml-2 md:mr-2 w-full mt-2 mb-2 md:mt-0 md:mb-0">
+                                            <input type="number" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" placeholder="Quantidade do produto" x-model="productQuantityInputAdd" x-on:keyup='if($event.target.value>{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(productIdInputAdd))?.stock){productQuantityInputAdd={{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(productIdInputAdd))?.stock;}else if($event.target.value<0){productQuantityInputAdd="0";}' x-bind:max='{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(productIdInputAdd))?.stock'>
                                         </label>
-                                        <button type="button" class="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="if (productIdInputAdd !== '' && productQuantityInputAdd !== '') {addProducts.push({id: productIdInputAdd, quantity: productQuantityInputAdd}); productIdInputAdd = ''; productQuantityInputAdd = '';}"><i class="fas fa-plus"></i></button>
+                                        <button type="button" class="px-5 py-2 text-white dark:text-dark-dark bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="if (productIdInputAdd !== '' && productQuantityInputAdd !== '') {addProducts.push({id: productIdInputAdd, quantity: productQuantityInputAdd}); productIdInputAdd = ''; productQuantityInputAdd = 0;}"><i class="fas fa-plus"></i></button>
                                     </div>
                                 </label>
-                                <table class="text-left w-full border-collapse">
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                                Produto
-                                            </th>
-                                            <th
-                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                                Quantidade
-                                            </th>
-                                            <th
-                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                                Açoes
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <template x-for="(product, index) in addProducts">
-                                            <tr class="hover:bg-grey-lighter">
-                                                <td class="py-4 px-6 border-b border-grey-light">
-                                                    <input type="number" style="display:none;" x-bind:name="'products['+index+'][id]'" required readonly x-bind:value="product.id">
-                                                    <span x-text='{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).name'></span>
-                                                </td>
-                                                <td class="py-4 px-6 border-b border-grey-light">
-                                                    <input type="number" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" x-bind:name="'products['+index+'][quantity]'" required x-bind:value="product.quantity">
-                                                </td>
-                                                <td class="py-4 px-6 border-b border-grey-light">
-                                                    <button type="button" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="addProducts.splice(index, 1);"><i class="fas fa-trash"></i></button>
-                                                </td>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full leading-normal">
+                                        <thead>
+                                            <tr>
+                                                <th
+                                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                                    Produto
+                                                </th>
+                                                <th
+                                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                                    Quantidade
+                                                </th>
+                                                <th
+                                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                                    Valor
+                                                </th>
+                                                <th
+                                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                                    Açoes
+                                                </th>
                                             </tr>
-                                        </template>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <template x-for="(product, index) in addProducts">
+                                                <tr class="hover:bg-grey-lighter border-b border-grey-light dark:border-none">
+                                                    <td class="py-4 px-6">
+                                                        <input type="number" class="hidden" x-bind:name="'products['+index+'][id]'" required readonly x-bind:value="product.id">
+                                                        <span class="dark:text-white" x-text='{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).name'></span>
+                                                    </td>
+                                                    <td class="py-4 px-6">
+                                                        <input type="number" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" x-bind:name="'products['+index+'][quantity]'" required x-bind:value="product.quantity" x-model="product.quantity" x-on:keyup='if($event.target.value>{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id))?.stock){product.quantity={{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id))?.stock;}else if($event.target.value<0){product.quantity="0";}'>
+                                                    </td>
+                                                    <td class="py-4 px-6">
+                                                        <span class="dark:text-white" x-text='(new Intl.NumberFormat("pt-br", {
+                                                                style: "currency",
+                                                                currency: "BRL",
+                                                                minimumFractionDigits: 2,
+                                                                maximumFractionDigits: 2,
+                                                            }))
+                                                            .format(
+                                                                (
+                                                                    {{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).price 
+                                                                    * 
+                                                                    product.quantity
+                                                                ) 
+                                                                / 100)'></span>
+                                                    </td>
+                                                    <td class="py-4 px-6">
+                                                        <button type="button" class="px-4 py-2 text-white dark:text-dark-dark bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="addProducts.splice(index, 1);"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mt-3 text-right">
+                                    <span class="text-xl dark:text-white" x-text='"Total a pagar: " + (new Intl.NumberFormat("pt-br", {
+                                        style: "currency",
+                                        currency: "BRL",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    }))
+                                    .format(addProducts.reduce(function(carry, product) {return ({{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).price * product.quantity) + carry;},0) / 100)'>
+                                    </span>
+                                </div>
                             </div>
                             <div class="mt-6">
-                                <button type="submit" class="px-4 py-3 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Cadastrar</button>
+                                <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Cadastrar</button>
                               </div>
                             </form>
                       </div>
   
                       <div class="mt-2">
                           <div>
-                              <button x-on:click="openCreate = false" type="submit" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
+                              <button x-on:click="openCreate = false" type="submit" class="px-4 py-3 bg-red-600 text-white dark:text-dark-dark rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
                           </div>
                       </div>
                 </div>
@@ -93,127 +154,210 @@
         </div>
 
         <div class="bg-white overflow-auto">
-            <table class="text-left w-full border-collapse">
-                <thead>
-                    <tr>
-                        <th
-                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Lançada em
-                        </th>
-                        <th
-                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Cliente
-                        </th>
-                        <th
-                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Açoes
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @each(sale in sales)
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-4 px-6 border-b border-grey-light">{{ new Date(sale.createdAt).toLocaleDateString() }}</td>
-                            <td class="py-4 px-6 border-b border-grey-light">{{ sale.client.name }}</td>
-                            <td class="py-4 px-6 border-b border-grey-light">
-                                <div class="mt-6" x-data="{ openUpdate{{ sale.id }}: false }" x-init="$watch('openUpdate{{ sale.id }}', value => console.log(value))">
-                                    <button class="px-4 py-2 mb-3 text-white bg-blue-500 hover:bg-blue-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openUpdate{{ sale.id }} = true"><i class="fas fa-pen"></i></button>
-                                    
-                                    <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-show="openUpdate{{ sale.id }}">
-                                        <div class="relative top-0  mx-auto p-5 border h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white" x-on:mousedown.away="openUpdate{{ sale.id }} = false">
-                                            <div class="mt-3 sm:mt-0 sm:text-left">
-                                                <form action="{{ route('sales.update', { id: sale.id }) }}" method="POST">
-                                                    <label class="block text-gray-700">
-                                                        Cliente
-                                                        <select class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" placeholder="Digite aqui" name="clientId" required>
-                                                            <option>Selecione um cliente</option>  
-                                                            @each(client in clients)
-                                                                @if(client.id === sale.clientId)
-                                                                    <option value="{{ client.id }}" selected>{{ client.name }}</option>
-                                                                @else
-                                                                    <option value="{{ client.id }}">{{ client.name }}</option>
-                                                                @endif
-                                                            @endeach
-                                                        </select>
-                                                    </label>
-                                                    <label class="flex flex-row items-center text-gray-700 mt-4">
-                                                        Pago
-                                                        <input type="checkbox" class="ml-4 mt:auto mb:auto border rounded block outline-none focus:border-blue-500" placeholder="Digite aqui" name="paidAt" checked="{{ sale.paid }}">
-                                                    </label>
-                                                    <div x-data='{ productIdInput{{sale.id}}: "", productQuantityInput{{sale.id}}: "", products{{sale.id}}: {{{JSON.stringify(sale.products.map(product => ({id:product.id,quantity:product.quantity})))}}}}'>
-                                                        <label class="text-gray-700 block mt-4 mb-4">
-                                                            Adicionar produtos
-                                                            <div class="flex flex-col md:flex-row">
-                                                                <select class="appearance-none border rounded px-4 py-3 block md:w-3/5 w-full outline-none focus:border-blue-500" placeholder="Digite aqui" x-model="productIdInput{{sale.id}}">
-                                                                    <option>Selecione um produto</option>  
-                                                                    @each(product in products)
-                                                                        <option value="{{ product.id }}" x-bind:style="products{{sale.id}}.some(e => String(e.id) === String({{product.id}})) ? 'display:none;' : ''">{{ product.name }}</option>  
+            <div class="overflow-x-auto">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Vendedor(a)
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Cliente
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Método de pagamento
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Valor total
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Cadastrada em
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Açoes
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(sale in sales)
+                            <tr class="hover:bg-grey-lighter">
+                                <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm"><p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ sale.salesman.name === user.name ? sale.salesman.name + ' (Eu)' : sale.salesman.name}}</p></td>
+                                <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm"><p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ sale.client.name }}</p></td>
+                                <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm"><p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ sale.formattedPayment }}</p></td>
+                                <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm"><p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ sale.total }}</p></td>
+                                <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm"><p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ sale.createdAt.setLocale('pt-BR').toFormat('dd \'de\' LLL \'de\' yyyy \'as\' HH:mm') }}</p></td>
+                                <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm">
+                                    <div class="flex flex-row items-center justify-start">
+                                        <div class="mr-2" x-data="{ openUpdate{{ sale.id }}: false }">
+                                            <button type="button" class="px-4 py-2 text-white dark:text-dark-light bg-blue-500 hover:bg-blue-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openUpdate{{ sale.id }} = true"><i class="fas fa-pen"></i></button>
+                                            
+                                            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openUpdate{{ sale.id }}">
+                                                <div class="relative top-0 mx-auto p-5 border dark:border-none h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white dark:bg-dark-dark" x-on:mousedown.away="openUpdate{{ sale.id }} = false">
+                                                    <div class="mt-3 sm:mt-0 sm:text-left">
+                                                        <form action="{{ route('sales.update', { id: sale.id }) }}" method="POST">
+                                                            <label class="block text-gray-700 dark:text-white mb-4">
+                                                                Cliente
+                                                                <select class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="clientId" required>
+                                                                    <option>Selecione um cliente</option>  
+                                                                    @each(client in clients)
+                                                                        @if(client.id === sale.clientId)
+                                                                            <option value="{{ client.id }}" selected>{{ client.name }}</option>
+                                                                        @else
+                                                                            <option value="{{ client.id }}">{{ client.name }}</option>
+                                                                        @endif
                                                                     @endeach
                                                                 </select>
-                                                                <label class="block text-gray-700 md:ml-2 md:mr-2 w-full mt-2 mb-2 md:mt-0 md:mb-0">
-                                                                    <input type="number" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500" placeholder="Quantidade do produto" x-model="productQuantityInput{{sale.id}}">
+                                                            </label>
+                                                            <label class="block text-gray-700 dark:text-white mb-4">
+                                                                Método de pagamento
+                                                                <select class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="payment">
+                                                                    <option>Selecione uma forma de pagamento</option>
+                                                                    @each(payment in [{value: 'M', name: 'Dinheiro'}, {value: 'DC', name: 'Cartão de débito'}, {value: 'CC', name: 'Cartão de crédito'}])
+                                                                    @if(sale.payment === payment.value)
+                                                                    <option selected value="{{ payment.value }}">{{ payment.name }}</option>
+                                                                    @else
+                                                                    <option value="{{ payment.value }}">{{ payment.name }}</option>
+                                                                    @endif
+                                                                    @endeach
+                                                                </select>
+                                                            </label>
+                                                            <div x-data='{ productIdInput{{sale.id}}: "", productQuantityInput{{sale.id}}: "0", products{{sale.id}}: {{{JSON.stringify(sale.products.map(product => ({id:product.id,quantity:product.quantity})))}}}}'>
+                                                                <label class="text-gray-700 dark:text-white block mt-4 mb-4">
+                                                                    Adicionar produtos
+                                                                    <div class="flex flex-col md:flex-row">
+                                                                        <select class="appearance-none border rounded px-4 py-3 block md:w-3/5 w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" placeholder="Digite aqui" x-model="productIdInput{{sale.id}}" x-on:change='if($event.target.value) if(productQuantityInput{{sale.id}} > {{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String($event.target.value))?.stock) productQuantityInput{{sale.id}} = {{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String($event.target.value))?.stock;'>
+                                                                            <option>Selecione um produto</option>  
+                                                                            @each(product in products)
+                                                                                @if(product.stock > 0)
+                                                                                <option value="{{ product.id }}" x-bind:class="products{{sale.id}}.some(e => String(e.id) === String({{product.id}})) ? 'hidden' : ''">{{ product.name }}</option>  
+                                                                                @endif
+                                                                            @endeach
+                                                                        </select>
+                                                                        <label class="block text-gray-700 md:ml-2 md:mr-2 w-full mt-2 mb-2 md:mt-0 md:mb-0">
+                                                                            <input type="number" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" placeholder="Quantidade do produto" x-model="productQuantityInput{{sale.id}}" x-on:keyup='if($event.target.value>{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(productIdInput{{sale.id}}))?.stock){productQuantityInput{{sale.id}}={{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(productIdInput{{sale.id}}))?.stock;}else if($event.target.value<0){productQuantityInput{{sale.id}}="0";}' x-bind:max='{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(productIdInput{{sale.id}}))?.stock'>
+                                                                        </label>
+                                                                        <button type="button" class="px-5 py-2 text-white dark:text-dark-dark bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="if (productIdInput{{sale.id}} !== '' && productQuantityInput{{sale.id}} !== '') {products{{sale.id}}.push({id: productIdInput{{sale.id}}, quantity: productQuantityInput{{sale.id}}});  productIdInput{{sale.id}} = ''; productQuantityInput{{sale.id}} = 0;}"><i class="fas fa-plus"></i></button>
+                                                                    </div>
                                                                 </label>
-                                                                <button type="button" class="px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="if (productIdInput{{sale.id}} !== '' && productQuantityInput{{sale.id}} !== '') {products{{sale.id}}.push({id: productIdInput{{sale.id}}, quantity: productQuantityInput{{sale.id}}});  productIdInput{{sale.id}} = ''; productQuantityInput{{sale.id}} = '';}"><i class="fas fa-plus"></i></button>
+                                                                <table class="text-left w-full border-collapse">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th
+                                                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                                                                Produto
+                                                                            </th>
+                                                                            <th
+                                                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                                                                Quantidade
+                                                                            </th>
+                                                                            <th
+                                                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                                                                Valor
+                                                                            </th>
+                                                                            <th
+                                                                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:border-none dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                                                                Açoes
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <template x-for="(product, index) in products{{sale.id}}">
+                                                                            <tr class="hover:bg-grey-lighter border-b border-grey-light dark:border-none">
+                                                                                <td class="py-4 px-6">
+                                                                                    <input type="number" class="hidden" x-bind:name="'products['+index+'][id]'" required readonly x-bind:value="product.id">
+                                                                                    <span class="dark:text-white" x-text='{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).name'></span>
+                                                                                </td>
+                                                                                <td class="py-4 px-6">
+                                                                                    <input type="number" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" x-bind:name="'products['+index+'][quantity]'" required x-bind:value="product.quantity" x-model="product.quantity" x-on:keyup='if($event.target.value>{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id))?.stock + {{{JSON.stringify(sale.products.map(product => ({id:product.id,quantity:product.quantity})))}}}.find(productFind => String(productFind.id) === String(product.id))?.quantity){product.quantity={{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id))?.stock +  + {{{JSON.stringify(sale.products.map(product => ({id:product.id,quantity:product.quantity})))}}}.find(productFind => String(productFind.id) === String(product.id))?.quantity;}else if($event.target.value<0){product.quantity="0";}'>
+                                                                                </td>
+                                                                                <td class="py-4 px-6">
+                                                                                    <span class="dark:text-white" x-text='(new Intl.NumberFormat("pt-br", {
+                                                                                            style: "currency",
+                                                                                            currency: "BRL",
+                                                                                            minimumFractionDigits: 2,
+                                                                                            maximumFractionDigits: 2,
+                                                                                        }))
+                                                                                        .format(
+                                                                                            (
+                                                                                                {{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).price 
+                                                                                                * 
+                                                                                                product.quantity
+                                                                                            ) 
+                                                                                            / 100)'></span>
+                                                                                </td>
+                                                                                <td class="py-4 px-6">
+                                                                                    <button type="button" class="px-4 py-2 text-white dark:text-dark-dark bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="products{{sale.id}}.splice(index, 1);"><i class="fas fa-trash"></i></button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </template>
+                                                                    </tbody>
+                                                                </table>
+                                                                <div class="mt-3 text-right">
+                                                                    <span class="text-xl dark:text-white" x-text='"Total a pagar: " + (new Intl.NumberFormat("pt-br", {
+                                                                        style: "currency",
+                                                                        currency: "BRL",
+                                                                        minimumFractionDigits: 2,
+                                                                        maximumFractionDigits: 2,
+                                                                    }))
+                                                                    .format(products{{sale.id}}.reduce(function(carry, product) {return ({{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).price * product.quantity) + carry;},0) / 100)'>
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                        </label>
-                                                        <table class="text-left w-full border-collapse">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th
-                                                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                                                        Produto
-                                                                    </th>
-                                                                    <th
-                                                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                                                        Quantidade
-                                                                    </th>
-                                                                    <th
-                                                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                                                        Açoes
-                                                                    </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <template x-for="(product, index) in products{{sale.id}}">
-                                                                    <tr class="hover:bg-grey-lighter">
-                                                                        <td class="py-4 px-6 border-b border-grey-light">
-                                                                            <input type="number" style="display:none;" x-bind:name="'products['+index+'][id]'" required readonly x-bind:value="product.id">
-                                                                            <span x-text='{{{JSON.stringify(products)}}}.find(productFind => String(productFind.id) === String(product.id)).name'></span>
-                                                                        </td>
-                                                                        <td class="py-4 px-6 border-b border-grey-light">
-                                                                            <input type="number" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" x-bind:name="'products['+index+'][quantity]'" required x-bind:value="product.quantity">
-                                                                        </td>
-                                                                        <td class="py-4 px-6 border-b border-grey-light">
-                                                                            <button type="button" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="products{{sale.id}}.splice(index, 1);"><i class="fas fa-trash"></i></button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </template>
-                                                            </tbody>
-                                                        </table>
+                                                            <div class="mt-6">
+                                                                <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
+                                                            </div>
+                                                            </form>
                                                     </div>
-                                                    <div class="mt-6">
-                                                        <button type="submit" class="px-4 py-3 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
+                                
+                                                    <div class="mt-2">
+                                                        <div>
+                                                            <button x-on:click="openUpdate{{ sale.id }} = false" type="button" class="px-4 py-3 bg-red-600 text-white dark:text-dark-dark rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
+                                                        </div>
                                                     </div>
-                                                    </form>
-                                            </div>
-                        
-                                            <div class="mt-2">
-                                                <div>
-                                                    <button x-on:click="openUpdate{{ sale.id }} = false" type="button" class="px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
                                                 </div>
                                             </div>
                                         </div>
+                                        @if(user.role === 'ADMIN')
+                                        <form action="{{ route('sales.delete', { id: sale.id }) }}" method="POST">
+                                            <button type="submit" class="px-4 py-2 text-white dark:text-dark-light bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                        @endif
                                     </div>
-                                </div>
-                                <form action="{{ route('sales.delete', { id: sale.id }) }}" method="POST">
-                                    <button type="submit" class="px-4 py-2 mb-3 text-white bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openUpdate{{ sale.id }} = true"><i class="fas fa-trash"></i></button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endeach
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        @endeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </main>
+<script>
+const addDocument = document.querySelector('input[id=adddocument]');
+
+VMasker(addDocument).maskPattern("999.999.999-99")
+</script>
+<script>
+function inputHandler(masks, max, event) {
+	var c = event.target;
+	const v = c.value.replace(/\D/g, '');
+	const m = c.value.length > max ? 1 : 0;
+	VMasker(c).unMask();
+	VMasker(c).maskPattern(masks[m]);
+	c.value = VMasker.toPattern(v, masks[m]);
+}
+
+const telMask = ['(99) 9999-99999', '(99) 99999-9999'];
+const addPhone = document.querySelector('input[id=addphone]');
+
+VMasker(addPhone).maskPattern(telMask[0]);
+
+addPhone.addEventListener('input', inputHandler.bind(undefined, telMask, 14), false);
+</script>
 @endsection

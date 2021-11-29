@@ -6,11 +6,11 @@ export default class Clients extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('name', 255).notNullable()
-      table.string('phone', 255).nullable()
-      table.string('email', 255).nullable()
+      table.string('name').notNullable()
+      table.string('phone').nullable()
+      table.string('email').nullable()
 
-      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
+      table.integer('account_id').unsigned().references('accounts.id')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
@@ -22,6 +22,10 @@ export default class Clients extends BaseSchema {
   }
 
   public async down() {
+    this.schema.table('clients', (table) => {
+      table.dropForeign('account_id')
+    })
+
     this.schema.dropTable(this.tableName)
   }
 }

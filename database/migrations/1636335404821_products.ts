@@ -6,11 +6,11 @@ export default class Products extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.string('name', 255).notNullable()
+      table.string('name').notNullable()
       table.integer('stock').notNullable()
       table.integer('price').notNullable()
 
-      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
+      table.integer('account_id').unsigned().references('accounts.id')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
@@ -22,6 +22,10 @@ export default class Products extends BaseSchema {
   }
 
   public async down() {
+    this.schema.table('products', (table) => {
+      table.dropForeign('account_id')
+    })
+
     this.schema.dropTable(this.tableName)
   }
 }

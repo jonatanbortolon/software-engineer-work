@@ -19,6 +19,13 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import HealthCheck from '@ioc:Adonis/Core/HealthCheck'
+
+Route.get('health', async ({ response }) => {
+  const report = await HealthCheck.getReport()
+
+  return report.healthy ? response.ok(report) : response.badRequest(report)
+})
 
 Route.group(() => {
   Route.get('/', async ({ view }) => {
@@ -26,7 +33,14 @@ Route.group(() => {
   }).as('home')
 
   Route.group(() => {
-    Route.get('/dashboard', 'DashboardController.index').as('dashboard')
+    Route.get('/dashboard', 'DashboardController.index').as('dashboard.get')
+
+    Route.group(() => {
+      Route.get('/', 'ProfileController.index').as('get')
+      Route.post('/', 'ProfileController.update').as('update')
+    })
+      .prefix('meu-perfil')
+      .as('myprofile')
 
     Route.group(() => {
       Route.get('/', 'ClientsController.index').as('get')
@@ -55,7 +69,31 @@ Route.group(() => {
       .prefix('vendas')
       .as('sales')
 
-    Route.get('/signout', 'AuthController.signoutGet').as('auth.signout')
+    Route.group(() => {
+      Route.post('/', 'StocksController.store').as('store')
+    })
+      .prefix('estoques')
+      .as('stocks')
+
+    Route.group(() => {
+      Route.post('/', 'SignupLinksController.store').as('store')
+    })
+      .prefix('link-registro')
+      .as('signuplinks')
+
+    Route.group(() => {
+      Route.get('/', 'AccountsController.index').as('get')
+      Route.post('/', 'AccountsController.update').as('update')
+    })
+      .prefix('contas')
+      .as('accounts')
+
+    Route.group(() => {
+      Route.get('/signout', 'AuthController.signoutGet').as('signout.get')
+      Route.post('/:id', 'AuthController.deleteParentPost').as('delete')
+    })
+      .prefix('user')
+      .as('auth')
   }).middleware(['userInfo', 'auth'])
 
   Route.group(() => {
@@ -69,6 +107,13 @@ Route.group(() => {
     Route.group(() => {
       Route.get('/', 'AuthController.signupGet').as('get')
       Route.post('/', 'AuthController.signupPost').as('post')
+
+      Route.group(() => {
+        Route.get('/', 'AuthController.signupParentGet').as('get')
+        Route.post('/', 'AuthController.signupParentPost').as('post')
+      })
+        .prefix('/:slug')
+        .as('parent')
     })
       .prefix('/cadastrar')
       .as('signup')

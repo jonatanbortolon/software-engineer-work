@@ -1,0 +1,81 @@
+@layout('layouts/masterauth')
+@set('title', 'GESTACO - Meu Perfil')
+@set('menuActive', 'myprofile')
+@section('content')
+<main class="w-full flex-grow p-6">
+    <h1 class="text-3xl text-black dark:text-white pb-6">Meu perfil</h1>
+
+    <div class="w-full flex flex-row items-center justify-center">
+        <div class="max-w-2xl w-full flex flex-col items-start justify-center flex-wrap">
+            <div class="w-full flex flex-col items-center justify-center">
+                <form action="{{ route('myprofile.update') }}" method="POST" class="w-full">
+                    <div class="w-full flex flex-col sm:flex-row items-center justify-start">
+                        <div class="p-6">
+                            <div class="z-10 w-48 h-48 rounded-full overflow-hidden focus:outline-none">
+                                <img src="https://avatars.dicebear.com/api/initials/{{ profile.name }}.svg">
+                            </div>
+                        </div>
+                        <div class="w-full block">
+                            <label class="block text-gray-700 dark:text-white mb-4">
+                                Nome
+                                <input type="text" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.name }}" placeholder="Digite aqui" name="name" required>
+                            </label>
+                            <label class="block text-gray-700 dark:text-white mb-4">
+                                Telefone
+                                <input type="text" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.phone ?? '' }}" placeholder="Digite aqui" name="phone" id="editphone">
+                            </label>
+                            <label class="block text-gray-700 dark:text-white mb-4">
+                                Email
+                                <input type="email" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.email }}" placeholder="Digite aqui" name="email" readonly>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
+                </form>
+                <form action="{{ route('accounts.update') }}" method="POST" class="w-full">
+                    @if(ownerId === profile.id)
+                    <div class="w-full block mt-16">
+                        <span class="text-xl text-black dark:text-white">Perfil da empresa</span>
+                        <label class="block text-gray-700 dark:text-white 4 mb-4">
+                            Nome Fantasia
+                            <input type="text" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.account.tradingName }}" placeholder="Digite aqui" name="tradingName" required>
+                        </label>
+                        <label class="block text-gray-700 dark:text-white mb-4">
+                            CNPJ
+                            <input type="text" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.account.document ?? '' }}" placeholder="Digite aqui" name="document" id="editdocument" required>
+                        </label>
+                        <label class="block text-gray-700 dark:text-white mb-4">
+                            Endereço
+                            <input type="text" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.account.address ?? '' }}" placeholder="Digite aqui" name="address" required>
+                        </label>
+                        <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
+                    </div>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<script>
+const addDocument = document.querySelector('input[id=editdocument]');
+
+VMasker(addDocument).maskPattern("99.999.999/9999-99")
+</script>
+<script>
+function inputHandler(masks, max, event) {
+	var c = event.target;
+	const v = c.value.replace(/\D/g, '');
+	const m = c.value.length > max ? 1 : 0;
+	VMasker(c).unMask();
+	VMasker(c).maskPattern(masks[m]);
+	c.value = VMasker.toPattern(v, masks[m]);
+}
+
+const telMask = ['(99) 9999-99999', '(99) 99999-9999'];
+const addPhone = document.querySelector('input[id=editphone]');
+
+VMasker(addPhone).maskPattern(telMask[0]);
+
+addPhone.addEventListener('input', inputHandler.bind(undefined, telMask, 14), false);
+</script>
+@endsection

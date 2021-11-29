@@ -1,36 +1,36 @@
 @layout('layouts/master')
-@set('title', 'Entrar')
+@set('title', 'GESTACO - Entrar')
 @section('content')
 <main>
-    <div class="min-h-screen flex items-center justify-center bg-gray-100 text-gray-900 relative">
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-dark text-gray-900 relative">
 
         <div class="px-5 py-6 lg:px-6 lg:py-8 w-full md:w-8/12 lg:w-6/12 xl:w-4/12 relative">
 
           <div class="mb-6 text-center">
-            <h3 class="text-3xl inline-flex items-center">
+            <h3 class="text-3xl inline-flex items-center dark:text-white">
               Gestaco
             </h3>
-            <p class="text-gray-600">
+            <p class="text-gray-600 dark:text-gray-300">
               Olá, entre para começar a usar
             </p>
           </div>
 
-          <div class="rounded border p-6 lg:p-10 shadow-sm bg-white">
+          <div class="rounded border dark:border-none p-6 lg:p-10 shadow-sm bg-white dark:bg-dark-light">
             <form action="{{ route('auth.signin.post') }}" method="POST">
-              <label class="block text-gray-700">
+              <label class="block text-gray-700 dark:text-white mb-4">
                 Email
-                <input type="email" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" placeholder="Digite aqui" name="email" required>
+                <input type="email" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="email">
               </label>
-              <label class="block text-gray-700 mt-4">
-                Password
-                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none focus:border-blue-500" placeholder="Digite aqui" name="password" required>
+              <label class="block text-gray-700 dark:text-white mb-4">
+                Senha
+                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password">
               </label>
               <div class="mt-6">
-                <button type="submit" class="px-4 py-3 bg-yellow-400 text-white rounded hover:bg-yellow-600 focus:outline-none focus:shadow-outline block w-full">Entrar</button>
+                <button type="submit" class="px-4 py-3 bg-yellow-400 hover:bg-yellow-600 text-white dark:text-dark-dark rounded focus:outline-none focus:shadow-outline block w-full">Entrar</button>
               </div>
             </form>
             <div class="mt-6 text-center text-sm">
-              <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block mb-2 md:mb-0" href="{{ route('auth.signup.get') }}">Nao é cadastrado ainda? Crie uma conta!</a>
+              <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block mb-2 md:mb-0 dark:text-white dark:hover:text-gray-300" href="{{ route('auth.signup.get') }}">Nao é cadastrado ainda? Crie uma conta!</a>
               {{--  <span class="text-gray-600 mx-1 hidden md:inline-block">·</span>
               <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block" href="{{ route('auth.signup.get') }}">Esqueceu sua senha? Recupere agora</a>  --}}
             </div>
@@ -47,8 +47,8 @@
             </div>
           @endif
 
-          <div class="text-xs text-gray-600 text-center mt-6">
-            <span class="font-semibold">Gestaco</span> &copy; <script>document.write((new Date).getFullYear());</script> · <a class="text-gray-600 hover:text-gray-700 underline" href="javascript:void(0)">Termos e condições</a>
+          <div class="fixed bottom-0 left-0 right-0 text-xs text-gray-600 text-center mb-6 dark:text-white">
+            <span class="font-semibold">Gestaco</span> &copy; <script>document.write((new Date).getFullYear());</script> · <a class="text-gray-600 hover:text-gray-700 dark:text-white dark:hover:text-gray-300 underline" href="javascript:void(0)">Termos e condições</a>
           </div>
 
         </div>

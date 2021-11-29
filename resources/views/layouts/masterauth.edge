@@ -8,24 +8,44 @@
     <title>{{ title ?? '' }}</title>
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/app.css') }}">
+    <!-- Alpine Plugins -->
+    <script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
     <!-- AlpineJS -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
     <!-- ChartJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <!-- Vanilla Masker -->
+    <script src="https://unpkg.com/vanilla-masker@1.1.1/build/vanilla-masker.min.js"></script>
+    <!-- Poppings Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+      />
+    <!-- Unfortunately Toastr uses JQuery onder the hood -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- AlpineJS x-cloak trick to prevent elements with x-show property to flash on screen on refresh/load -->
+    <style>
+        [x-cloak] { display: none }
+    </style>
     @!section('head')
 </head>
 
-<body>
-    <div class="container-fluid">
-        <div class="bg-gray-100 font-family-karla flex">
+<body x-cloak x-data="{drawer: $persist(true), dark: $persist(false)}" x-bind:class="dark ? 'dark' : ''">
+    <div class="container-fluid bg-gray-100 dark:bg-dark-dark">
+        <div class="font-family-karla flex">
             @include('partials/aside')
             
             <div class="w-full flex flex-col h-screen overflow-y-hidden">
                 @include('partials/header')
             
-                <div class="w-full overflow-x-hidden border-t flex flex-col">
+                <div class="w-full h-full overflow-x-hidden flex flex-col">
                     
                     @!section('content')
             
@@ -35,7 +55,17 @@
             </div>
         </div>
     </div>
-
 </body>
+<script>
+const flashSuccessMessage = ({{{ flashMessages.has('success') }}});
+const flashErrorMessage = ({{{ flashMessages.has('error') }}});
 
+if (flashSuccessMessage) {
+    toastr.success("{{ flashMessages.get('success') ?? '' }}", "Sucesso")
+}
+
+if (flashErrorMessage) {
+    toastr.error("{{ flashMessages.get('error') ?? '' }}", "Erro")
+}
+</script>
 </html>

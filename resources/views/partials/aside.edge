@@ -1,32 +1,49 @@
-<aside class="relative bg-primary-400 h-screen w-64 hidden sm:block">
-    <div class="p-6 pb-0">
-        <a class="text-white text-3xl font-semibold uppercase">Gestaco</a>
-        <a href="{{ route('sales.get') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
-            <i class="fas fa-plus mr-3"></i> Nova venda
-        </a>
+<aside class="relative bg-white dark:bg-dark-light h-screen hidden sm:flex flex-col">
+    <div class="p-6 pb-0 mb-10">
+        <button type="button" class="text-dark-gray dark:text-white py-2 px-4 nav-item -ml-2" x-on:click="drawer = !drawer">
+            <i class="fas fa-bars"></i>
+        </button>
+        {{--  <a class="text-primary-400 text-3xl font-semibold uppercase">Gestaco</a>  --}}
+        {{--  <a href="{{ route('sales.get') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+            <i class="fas fa-plus m-1 mr-3"></i> Nova venda
+        </a>  --}}
     </div>
-    <nav class="text-white text-base font-semibold bg-gray-100">
-        <a class="{{menuActive === 'dashboard' ? 'rounded-br-3xl' : ''}} bg-primary-400 py-4 pl-6 flex">
-            &nbsp;
+    <nav class="text-white text-base font-semibold">
+        @if(user.role === 'ADMIN')
+        <a href="{{ route('dashboard.get') }}" class="w-full flex items-center {{menuActive === 'dashboard' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+            <i class="fas fa-tachometer-alt m-1 {{menuActive === 'dashboard' ? 'ml-0' : ''}}"></i>
+            <span x-text="drawer ? 'Dashboard' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
-        <a href="{{ route('dashboard') }}" class="flex items-center {{menuActive === 'dashboard' ? 'active-nav-link bg-gray-100 text-primary-600' : 'hover:text-gray-200 text-white bg-primary-400'}} {{menuActive === 'clients' ? 'rounded-br-3xl' : ''}} text-white py-4 pl-6 nav-item">
-            <i class="fas fa-tachometer-alt mr-3"></i>
-            Dashboard
+        @endif
+        @if(user.role === 'ADMIN' || user.role === 'SALESMAN')
+        <a href="{{ route('clients.get') }}" class="w-full flex items-center {{menuActive === 'clients' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+            <i class="fas fa-user m-1 {{menuActive === 'clients' ? 'ml-0' : ''}}"></i>
+            <span x-text="drawer ? 'Clientes' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
-        <a href="{{ route('clients.get') }}" class="flex items-center {{menuActive === 'clients' ? 'active-nav-link bg-gray-100 text-primary-600' : 'hover:text-gray-200 text-white bg-primary-400'}} {{menuActive === 'dashboard' ? 'rounded-tr-3xl' : ''}} {{menuActive === 'products' ? 'rounded-br-3xl' : ''}} py-4 pl-6 nav-item">
-            <i class="fas fa-user mr-3"></i>
-            Clientes
+        @endif
+        @if(user.role === 'ADMIN' || user.role === 'STOCKIST')
+        <a href="{{ route('products.get') }}" class="w-full flex items-center {{menuActive === 'products' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+            <i class="fas fa-box-open m-1 {{menuActive === 'products' ? 'ml-0' : ''}}"></i>
+            <span x-text="drawer ? 'Produtos' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
-        <a href="{{ route('products.get') }}" class="flex items-center {{menuActive === 'products' ? 'active-nav-link bg-gray-100 text-primary-600' : 'hover:text-gray-200 text-white bg-primary-400'}} {{menuActive === 'clients' ? 'rounded-tr-3xl' : ''}}{{menuActive === 'sales' ? 'rounded-br-3xl' : ''}} text-white py-4 pl-6 nav-item">
-            <i class="fas fa-box-open mr-3"></i>
-            Produtos
+        @endif
+        @if(user.role === 'ADMIN' || user.role === 'SALESMAN')
+        <a href="{{ route('sales.get') }}" class="w-full flex items-center {{menuActive === 'sales' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+            <i class="fas fa-cash-register m-1 {{menuActive === 'sales' ? 'ml-0' : ''}}"></i>
+            <span x-text="drawer ? 'Vendas' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
-        <a href="{{ route('sales.get') }}" class="flex items-center {{menuActive === 'sales' ? 'active-nav-link bg-gray-100 text-primary-600' : 'hover:text-gray-200 text-white bg-primary-400'}} {{menuActive === 'products' ? 'rounded-tr-3xl' : ''}} text-white py-4 pl-6 nav-item">
-            <i class="fas fa-cash-register mr-3"></i>
-            Vendas
+        @endif
+        @if(user.role === 'ADMIN')
+        <a href="{{ route('accounts.get') }}" class="w-full flex items-center {{menuActive === 'accounts' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+            <i class="fas fa-users m-1 {{menuActive === 'accounts' ? 'ml-0' : ''}}"></i>
+            <span x-text="drawer ? 'Contas' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
-        <a class="{{menuActive === 'sales' ? 'rounded-tr-3xl' : ''}} bg-primary-400 py-4 pl-6 flex">
-            &nbsp;
-        </a>
+        @endif
     </nav>
+    <div class="h-full"></div>
+    <button type="button" class="w-full flex items-center text-dark-gray dark:text-white py-4 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'" x-on:click="dark = !dark">
+        <i x-cloak x-show="dark" class="m-1 fas fa-moon"></i>
+        <i x-cloak x-show="!dark" class="m-1 fas fa-sun"></i>
+        <span class="whitespace-nowrap" x-bind:class="drawer ? 'ml-3' : ''" x-text="drawer ? 'Modo escuro' : ''"></span>
+    </button>
 </aside>

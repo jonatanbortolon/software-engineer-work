@@ -1,21 +1,22 @@
 import { DateTime } from 'luxon'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import {
-  afterFetch,
-  afterFind,
   BaseModel,
   beforeSave,
   BelongsTo,
   belongsTo,
   column,
   computed,
+  HasMany,
+  hasMany,
   ManyToMany,
   manyToMany,
   scope,
 } from '@ioc:Adonis/Lucid/Orm'
 import { SoftDeletes } from '@ioc:Adonis/Addons/LucidSoftDeletes'
-import User from './User'
 import Sale from './Sale'
+import Stock from './Stock'
+import Account from './Account'
 
 export default class Product extends compose(BaseModel, SoftDeletes) {
   @column({ isPrimary: true })
@@ -25,16 +26,13 @@ export default class Product extends compose(BaseModel, SoftDeletes) {
   public name: string
 
   @column()
-  public stock: number
-
-  @column()
   public price: number
 
   @column()
-  public userId: number
+  public accountId: number
 
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+  @belongsTo(() => Account)
+  public account: BelongsTo<typeof Account>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -43,7 +41,7 @@ export default class Product extends compose(BaseModel, SoftDeletes) {
   public updatedAt: DateTime
 
   @computed()
-  public get formatedPrice() {
+  public get formattedPrice() {
     const formatter = new Intl.NumberFormat('pt-br', {
       style: 'currency',
       currency: 'BRL',
@@ -51,29 +49,22 @@ export default class Product extends compose(BaseModel, SoftDeletes) {
       maximumFractionDigits: 2,
     })
 
-    return formatter.format(this.price)
+    return formatter.format(this.price / 100)
   }
 
   @beforeSave()
   public static async formatPriceSave(product: Product) {
     if (product.$dirty.price) {
-      product.price = product.price * 100
+      product.price = Number(String(product.price).replace('.', '').replace(',', '.')) * 100
     }
   }
 
-  @afterFetch()
-  public static async formatPriceFetch(products: Product[]) {
-    products.forEach((product) => (product.price = product.price / 100))
-  }
-
-  @afterFind()
-  public static async formatPriceFind(product: Product) {
-    product.price = product.price / 100
-  }
-
-  public static userScope = scope((query, user: number) => {
-    query.where('user_id', user)
+  public static accountScope = scope((query, user: number) => {
+    query.where('account_id', user)
   })
+
+  @hasMany(() => Stock)
+  public stocks: HasMany<typeof Stock>
 
   @manyToMany(() => Sale, { pivotColumns: ['quantity'] })
   public sales: ManyToMany<typeof Sale>
