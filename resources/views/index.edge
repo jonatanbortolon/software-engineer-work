@@ -1,5 +1,5 @@
-@layout('layouts/master')
-@set('title', 'GESTACO - Inicio')
+@layout('layouts/landingpage')
+@set('title', 'GESTACO')
 @section('content')
 <main class="text-gray-800 antialiased">
     <nav
@@ -12,7 +12,7 @@
           class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start"
         >
           <a
-            class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
+            class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white dark:text-yellow-400"
             href="{{ route('home') }}"
             >Gestaco</a
           ><button
@@ -33,12 +33,18 @@
             <li class="flex items-center">
               <a
                 href="{{ route('auth.signin.get') }}"
-                class="bg-white text-gray-800 active:bg-gray-100 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3"
+                class="bg-white text-gray-800 active:bg-gray-100 dark:bg-gray-800 dark:text-white text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3"
                 type="button"
                 style="transition: all 0.15s ease 0s;"
               >
-                <i class="fas fa-arrow-alt-circle-down"></i> Entrar
-            </a>
+                Entrar
+              </a>
+            </li>
+            <li class="flex items-center">
+              <button type="button" class="flex items-center justify-center text-white py-4 px-6 nav-item text-center" x-on:click="dark = !dark">
+                <i x-cloak x-show="dark" class="m-1 fas fa-moon"></i>
+                <i x-cloak x-show="!dark" class="m-1 fas fa-sun"></i>
+              </button>
             </li>
           </ul>
         </div>
@@ -50,7 +56,7 @@
         style="min-height: 75vh;"
       >
         <div
-          class="absolute top-0 w-full h-full bg-center bg-cover"
+          class="absolute top-0 w-full h-full bg-center bg-cover dark:filter dark:brightness-0 bg-dark-dark"
           style='background-image: url("https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1267&amp;q=80");'
         >
           <span
@@ -62,7 +68,7 @@
           <div class="items-center flex flex-wrap">
             <div class="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
               <div class="pr-12">
-                <h1 class="text-white font-semibold text-5xl">
+                <h1 class="text-white font-semibold text-5xl dark:text-yellow-400">
                   O melhor app de gestao para a melhor versao da sua empresa
                 </h1>
                 <p class="mt-4 text-lg text-gray-300">
@@ -86,18 +92,18 @@
             y="0"
           >
             <polygon
-              class="text-gray-300 fill-current"
+              class="text-gray-300 dark:text-dark-light fill-current"
               points="2560 0 2560 100 0 100"
             ></polygon>
           </svg>
         </div>
       </div>
-      <section class="pb-20 bg-gray-300 -mt-24">
+      <section class="pb-20 bg-gray-300 -mt-24 dark:bg-dark-light">
         <div class="container mx-auto px-4">
           <div class="flex flex-wrap">
             <div class="lg:pt-12 pt-6 w-full md:w-4/12 px-4 text-center">
               <div
-                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg"
+                class="relative flex flex-col min-w-0 break-words bg-white dark:bg-dark-dark w-full mb-8 shadow-lg rounded-lg"
               >
                 <div class="px-4 py-5 flex-auto">
                   <div
@@ -105,8 +111,8 @@
                   >
                     <i class="fas fa-award"></i>
                   </div>
-                  <h6 class="text-xl font-semibold">Fácil de usar</h6>
-                  <p class="mt-2 mb-4 text-gray-600">
+                  <h6 class="text-xl font-semibold dark:text-white">Fácil de usar</h6>
+                  <p class="mt-2 mb-4 text-gray-600 dark:text-gray-400">
                     Nosso sistema é focado na fácilidade para você nao perder tempo.
                   </p>
                 </div>
@@ -114,7 +120,7 @@
             </div>
             <div class="w-full md:w-4/12 px-4 text-center">
               <div
-                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg"
+                class="relative flex flex-col min-w-0 break-words bg-white dark:bg-dark-dark w-full mb-8 shadow-lg rounded-lg"
               >
                 <div class="px-4 py-5 flex-auto">
                   <div
@@ -122,8 +128,8 @@
                   >
                     <i class="fas fa-money-bill-wave-alt"></i>
                   </div>
-                  <h6 class="text-xl font-semibold">Gratuito</h6>
-                  <p class="mt-2 mb-4 text-gray-600">
+                  <h6 class="text-xl font-semibold dark:text-white">Gratuito</h6>
+                  <p class="mt-2 mb-4 text-gray-600 dark:text-gray-400">
                     Nosso sistema é totalmente gratuito para você nao se preocupar com custos extras.
                   </p>
                 </div>
@@ -131,7 +137,7 @@
             </div>
             <div class="pt-6 w-full md:w-4/12 px-4 text-center">
               <div
-                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg"
+                class="relative flex flex-col min-w-0 break-words bg-white dark:bg-dark-dark w-full mb-8 shadow-lg rounded-lg"
               >
                 <div class="px-4 py-5 flex-auto">
                   <div
@@ -139,8 +145,8 @@
                   >
                     <i class="fas fa-phone-alt"></i>
                   </div>
-                  <h6 class="text-xl font-semibold">Suporte 24h</h6>
-                  <p class="mt-2 mb-4 text-gray-600">
+                  <h6 class="text-xl font-semibold dark:text-white">Suporte 24h</h6>
+                  <p class="mt-2 mb-4 text-gray-600 dark:text-gray-400">
                     Além de tudo isso oferecemos suporte 24 horas por dia para você.
                   </p>
                 </div>
@@ -173,7 +179,7 @@
         <div class="container mx-auto px-4 lg:pt-24 lg:pb-64">
           <div class="flex flex-wrap text-center justify-center">
             <div class="w-full lg:w-6/12 px-4">
-              <h2 class="text-4xl font-semibold text-white">Avance seus negócios</h2>
+              <h2 class="text-4xl font-semibold text-white dark:text-yellow-400">Avance seus negócios</h2>
               <p class="text-lg leading-relaxed mt-4 mb-4 text-gray-500">
                 O porque somos tao indicados para te ajudar
               </p>
@@ -221,7 +227,7 @@
         </div>
       </section>
     </main>
-    <footer class="relative bg-gray-300 pt-8 pb-6">
+    <footer class="relative bg-gray-300 dark:bg-dark-light pt-8 pb-6">
       <div
         class="bottom-auto top-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden -mt-20"
         style="height: 80px;"
@@ -236,7 +242,7 @@
           y="0"
         >
           <polygon
-            class="text-gray-300 fill-current"
+            class="text-gray-300 dark:text-dark-light fill-current"
             points="2560 0 2560 100 0 100"
           ></polygon>
         </svg>
@@ -244,29 +250,29 @@
       <div class="container mx-auto px-4">
         <div class="flex flex-wrap">
           <div class="w-full lg:w-6/12 px-4">
-            <h4 class="text-3xl font-semibold">Mentenha contato conosco!</h4>
-            <h5 class="text-lg mt-0 mb-2 text-gray-700">
+            <h4 class="text-3xl font-semibold dark:text-yellow-400">Mentenha contato conosco!</h4>
+            <h5 class="text-lg mt-0 mb-2 text-gray-700 dark:text-gray-400">
               Siga a gente nas plataformas para nao perder.
             </h5>
             <div class="mt-6">
               <a
-                class="bg-white text-blue-400 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 p-3"
+                class="bg-white dark:bg-dark-dark dark:text-white text-blue-400 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 p-3"
                 type="button"
               >
                 <i class="flex fab fa-twitter"></i></a
               ><a
-                class="bg-white text-blue-600 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 p-3"
+                class="bg-white dark:bg-dark-dark dark:text-white text-blue-600 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 p-3"
                 type="button"
               >
                 <i class="flex fab fa-facebook-square"></i></a
               ><a
-                class="bg-white text-pink-400 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 p-3"
+                class="bg-white dark:bg-dark-dark dark:text-white text-pink-400 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 p-3"
                 type="button"
               >
                 <i class="flex fab fa-dribbble"></i></a
               ><a
                 href="https://github.com/jonatanbortolon/software-engineer-work"
-                class="bg-white text-gray-900 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 p-3"
+                class="bg-white dark:bg-dark-dark dark:text-white text-gray-900 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 p-3"
                 type="button"
               >
                 <i class="flex fab fa-github"></i>
