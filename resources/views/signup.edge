@@ -19,19 +19,19 @@
             <form action="{{ route('auth.signup.post') }}" method="POST">
               <label class="block text-gray-700 dark:text-white mb-4">
                 Nome completo
-                <input type="text" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="name">
+                <input type="text" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="name" required>
               </label>
               <label class="block text-gray-700 dark:text-white mb-4">
                 Email
-                <input type="email" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="email">
+                <input type="email" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="email" required>
               </label>
               <label class="block text-gray-700 dark:text-white mb-4">
                 Senha
-                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password">
+                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password" required>
               </label>
               <label class="block text-gray-700 dark:text-white mb-4">
                 Confirme sua senha
-                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password_confirmation">
+                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password_confirmation" required>
               </label>
               <label class="block mt-4">
                 <input type="checkbox" class="mr-1 leading-none" name="terms" required>
@@ -39,17 +39,6 @@
                   Eu aceito os termos e condições
                 </span>
               </label>
-
-              @if (flashMessages.has("errors"))
-              <div class="px-4 py-3 w-full bg-red-300 mt-3">
-                  @each(message in flashMessages.get("errors"))
-                    <span class="text-white">
-                        {{ message[0] }}.
-                    </span>
-                    <br>
-                  @endeach
-              </div>
-              @endif
 
               <div class="mt-6">
                 <button type="submit" class="px-4 py-3 bg-yellow-400 hover:bg-yellow-600 text-white dark:text-dark-dark rounded focus:outline-none focus:shadow-outline block w-full">Cadastrar</button>

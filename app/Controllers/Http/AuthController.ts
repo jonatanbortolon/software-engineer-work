@@ -34,7 +34,14 @@ export default class AuthController {
 
       return response.redirect().toRoute('dashboard.get')
     } catch (e) {
-      session.flash('errors', e.messages)
+      session.flash(
+        'error',
+        e.messages
+          ? e.messages[Object.keys(e.messages)[0]]
+          : e.responseText === 'E_INVALID_AUTH_PASSWORD: Password mis-match'
+          ? 'Senha incorreta!'
+          : 'Usuário nao cadastrado!'
+      )
       return response.redirect().back()
     }
   }
@@ -93,7 +100,10 @@ export default class AuthController {
 
       return response.redirect().toRoute('dashboard.get')
     } catch (e) {
-      session.flash('errors', e.messages)
+      session.flash(
+        'error',
+        e.messages ? e.messages[Object.keys(e.messages)[0]] : 'Ops, aconteceu um erro interno!'
+      )
       return response.redirect().back()
     }
   }

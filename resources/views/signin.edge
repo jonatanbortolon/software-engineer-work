@@ -19,11 +19,11 @@
             <form action="{{ route('auth.signin.post') }}" method="POST">
               <label class="block text-gray-700 dark:text-white mb-4">
                 Email
-                <input type="email" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="email">
+                <input type="email" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="email" required>
               </label>
               <label class="block text-gray-700 dark:text-white mb-4">
                 Senha
-                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password">
+                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password" required>
               </label>
               <div class="mt-6">
                 <button type="submit" class="px-4 py-3 bg-yellow-400 hover:bg-yellow-600 text-white dark:text-dark-dark rounded focus:outline-none focus:shadow-outline block w-full">Entrar</button>
@@ -35,17 +35,6 @@
               <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block" href="{{ route('auth.signup.get') }}">Esqueceu sua senha? Recupere agora</a>  --}}
             </div>
           </div>
-
-          @if (flashMessages.has("errors"))
-            <div class="px-4 py-3 w-full bg-red-300 mt-3">
-              @each(message in flashMessages.get("errors"))
-                <span class="text-white">
-                  {{ message[0] }}.
-                </span>
-                <br>
-              @endeach
-            </div>
-          @endif
 
           <div class="fixed bottom-0 left-0 right-0 text-xs text-gray-600 text-center mb-6 dark:text-white">
             <span class="font-semibold">Gestaco</span> &copy; <script>document.write((new Date).getFullYear());</script> · <a class="text-gray-600 hover:text-gray-700 dark:text-white dark:hover:text-gray-300 underline" href="javascript:void(0)">Termos e condições</a>
