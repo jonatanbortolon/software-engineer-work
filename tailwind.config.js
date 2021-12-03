@@ -4,9 +4,6 @@ module.exports = {
   mode: 'jit',
   purge: ['./resources/views/**/*.edge', './resources/assets/ts/**/*.ts'],
   darkMode: 'class', // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
   variants: {
     extend: {},
   },
@@ -32,6 +29,14 @@ module.exports = {
     },
     fontFamily: {
       sans: ['"Poppins"', 'sans-serif'],
+    },
+    extend: {
+      width: {
+        '50px': '50px',
+      },
+      height: {
+        '50px': '50px',
+      },
     },
   },
 }

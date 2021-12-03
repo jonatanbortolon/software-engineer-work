@@ -16,22 +16,26 @@
           </div>
 
           <div class="rounded border dark:border-none p-6 lg:p-10 shadow-sm bg-white dark:bg-dark-light">
-            <form action="{{ route('auth.signup.post') }}" method="POST">
+            <form action="{{ route('auth.signup.post') }}" method="POST" x-data="{ passwordVisible: false }">
               <label class="block text-gray-700 dark:text-white mb-4">
                 Nome completo
-                <input type="text" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="name" required>
+                <input type="text" class="appearance-none border rounded px-4 py-3 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="name" required>
               </label>
               <label class="block text-gray-700 dark:text-white mb-4">
                 Email
-                <input type="email" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="email" required>
+                <input type="email" class="appearance-none border rounded px-4 py-3 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="email" required>
               </label>
-              <label class="block text-gray-700 dark:text-white mb-4">
+              <label class="block text-gray-700 dark:text-white mb-4 relative">
                 Senha
-                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password" required>
+                <input x-bind:type="passwordVisible ? 'text' : 'password'" class="appearance-none border rounded px-4 py-3 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password" required>
+                <div class="flex items-center justify-center absolute cursor-pointer right-0 top-6 w-50px h-50px text-black dark:text-white" x-on:click="passwordVisible = !passwordVisible">
+                  <i x-show="!passwordVisible" class="fas fa-eye"></i>
+                  <i x-show="passwordVisible" class="fas fa-eye-slash"></i>
+                </div>
               </label>
               <label class="block text-gray-700 dark:text-white mb-4">
                 Confirme sua senha
-                <input type="password" class="appearance-none border rounded px-4 py-3 mt-1 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password_confirmation" required>
+                <input x-bind:type="passwordVisible ? 'text' : 'password'" class="appearance-none border rounded px-4 py-3 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password_confirmation" required>
               </label>
               <label class="block mt-4">
                 <input type="checkbox" class="mr-1 leading-none" name="terms" required>

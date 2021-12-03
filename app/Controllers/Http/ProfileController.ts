@@ -22,6 +22,7 @@ export default class ProfilesController {
         name: schema.string({}, [rules.required()]),
         phone: schema.string.optional({}, [rules.regex(/\(\d{2,}\) \d{4,}\-\d{4}/g)]),
         email: schema.string.optional({}, [rules.email()]),
+        password: schema.string.optional({}, [rules.confirmed()]),
       })
 
       await request.validate({
@@ -31,6 +32,7 @@ export default class ProfilesController {
       const name = request.input('name')
       const phone = request.input('phone')
       const email = request.input('email')
+      const password = request.input('password')
 
       const user = auth.use('web').user!
 
@@ -47,6 +49,7 @@ export default class ProfilesController {
           name: name,
           phone: phone,
           email: email,
+          password: password,
         })
         .save()
 

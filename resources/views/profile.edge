@@ -15,7 +15,7 @@
                                 <img src="https://avatars.dicebear.com/api/initials/{{ profile.name }}.svg">
                             </div>
                         </div>
-                        <div class="w-full block">
+                        <div class="w-full block" x-data="{ passwordVisible: false }">
                             <label class="block text-gray-700 dark:text-white mb-4">
                                 Nome
                                 <input type="text" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.name }}" placeholder="Digite aqui" name="name" required>
@@ -26,7 +26,19 @@
                             </label>
                             <label class="block text-gray-700 dark:text-white mb-4">
                                 Email
-                                <input type="email" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.email }}" placeholder="Digite aqui" name="email" readonly>
+                                <input type="email" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.email }}" placeholder="Digite aqui" name="email">
+                            </label>
+                            <label class="block text-gray-700 dark:text-white mb-4 relative">
+                                Nova senha
+                                <input x-bind:type="passwordVisible ? 'text' : 'password'" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" placeholder="Digite aqui" name="password">
+                                <div class="flex items-center justify-center absolute cursor-pointer right-0 top-6 w-50px h-50px text-black dark:text-white" x-on:click="passwordVisible = !passwordVisible">
+                                    <i x-show="!passwordVisible" class="fas fa-eye"></i>
+                                    <i x-show="passwordVisible" class="fas fa-eye-slash"></i>
+                                </div>
+                            </label>
+                            <label class="block text-gray-700 dark:text-white mb-4">
+                                Confirme sua nova senha
+                                <input x-bind:type="passwordVisible ? 'text' : 'password'" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" placeholder="Digite aqui" name="password_confirmation">
                             </label>
                         </div>
                     </div>
