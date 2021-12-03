@@ -7,7 +7,7 @@
 
     <div class="w-full">
         <div class="mt-6" x-data="{ openCreate: false }">
-            <button class="px-4 py-2 mb-3 text-white dark:text-dark-dark bg-green-500 hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openCreate = true">Criar link para cadastro<i class="fas fa-plus ml-2"></i></button>
+            <button class="px-4 py-2 mb-3 text-white dark:text-dark-dark bg-green-500 transition-all hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openCreate = true">Criar link para cadastro<i class="fas fa-plus ml-2"></i></button>
             
             <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openCreate"  >
                 <div class="relative top-0 mx-auto p-5 border dark:border-none h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white dark:bg-dark-dark" x-on:mousedown.away="openCreate = false">
@@ -25,14 +25,14 @@
                                 </div>
                             </label>
                             <div class="mt-6">
-                                <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Cadastrar</button>
+                                <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded transition-all hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Cadastrar</button>
                               </div>
                             </form>
                       </div>
   
                       <div class="mt-2">
                           <div>
-                              <button x-on:click="openCreate = false" type="submit" class="px-4 py-3 bg-red-600 text-white dark:text-dark-dark rounded hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
+                              <button x-on:click="openCreate = false" type="submit" class="px-4 py-3 bg-red-600 text-white dark:text-dark-dark rounded transition-all hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
                           </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                             <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm">
                                 {{--  @if(user.role === 'ADMIN')
                                 <form action="{{ route('auth.delete', { id: account.id }) }}" method="POST">
-                                    <button type="submit" class="px-4 py-2 text-white dark:text-dark-dark bg-red-500 hover:bg-red-600 rounded select-none no-outline focus:shadow-outline"><i class="fas fa-trash"></i></button>
+                                    <button type="submit" class="px-4 py-2 text-white dark:text-dark-dark bg-red-500 transition-all hover:bg-red-600 rounded select-none no-outline focus:shadow-outline"><i class="fas fa-trash"></i></button>
                                 </form>
                                 @endif  --}}
                             </td>

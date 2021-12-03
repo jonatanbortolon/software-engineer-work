@@ -31,6 +31,7 @@ module.exports = {
       sans: ['"Poppins"', 'sans-serif'],
     },
     extend: {
+      display: ['group-hover'],
       width: {
         '50px': '50px',
       },

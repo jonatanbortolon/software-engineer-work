@@ -42,7 +42,7 @@
                             </label>
                         </div>
                     </div>
-                    <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
+                    <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded transition-all hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
                 </form>
                 <form action="{{ route('accounts.update') }}" method="POST" class="w-full">
                     @if(ownerId === profile.id)
@@ -60,7 +60,7 @@
                             Endereço
                             <input type="text" class="appearance-none border rounded px-4 py-3 block w-full outline-none focus:border-blue-500 dark:bg-dark-light dark:text-white dark:border-gray-600 dark:focus:border-blue-500" value="{{ profile.account.address ?? '' }}" placeholder="Digite aqui" name="address" required>
                         </label>
-                        <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
+                        <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded transition-all hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Atualizar</button>
                     </div>
                     @endif
                 </div>

@@ -1,7 +1,9 @@
 <aside class="relative bg-white dark:bg-dark-light h-screen hidden sm:flex flex-col">
     <div class="p-6 pb-0 mb-10">
-        <button type="button" class="text-dark-gray dark:text-white py-2 px-4 nav-item -ml-2" x-on:click="drawer = !drawer">
-            <i class="fas fa-bars"></i>
+        <button type="button" class="group text-dark-gray dark:text-white py-2 px-4 nav-item -ml-2 relative" x-on:click="drawer = !drawer">
+            <i class="fas fa-bars block group-hover:opacity-0 transition-all duration-300"></i>
+            <i x-show="drawer" class="fas fa-compress absolute opacity-0 group-hover:opacity-100 top-2 left-4 transition-all duration-300"></i>
+            <i x-show="!drawer" class="fas fa-expand absolute opacity-0 group-hover:opacity-100 top-2 left-4 transition-all duration-300"></i>
         </button>
         {{--  <a class="text-primary-400 text-3xl font-semibold uppercase">Gestaco</a>  --}}
         {{--  <a href="{{ route('sales.get') }}" class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
@@ -10,40 +12,40 @@
     </div>
     <nav class="text-white text-base font-semibold">
         @if(user.role === 'ADMIN')
-        <a href="{{ route('dashboard.get') }}" class="w-full flex items-center {{menuActive === 'dashboard' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('dashboard.get') }}" class="w-full flex items-center hover:border-l-4 {{ menuActive === 'dashboard' ? '' : 'hover:border-gray-400 transition-all' }} {{menuActive === 'dashboard' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-tachometer-alt m-1 {{menuActive === 'dashboard' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Dashboard' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
         @if(user.role === 'ADMIN' || user.role === 'SALESMAN')
-        <a href="{{ route('clients.get') }}" class="w-full flex items-center {{menuActive === 'clients' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('clients.get') }}" class="w-full flex items-center hover:border-l-4 {{ menuActive === 'clients' ? '' : 'hover:border-gray-400 transition-all' }} {{menuActive === 'clients' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-user m-1 {{menuActive === 'clients' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Clientes' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
         @if(user.role === 'ADMIN' || user.role === 'STOCKIST')
-        <a href="{{ route('products.get') }}" class="w-full flex items-center {{menuActive === 'products' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('products.get') }}" class="w-full flex items-center hover:border-l-4 {{ menuActive === 'products' ? '' : 'hover:border-gray-400 transition-all' }} {{menuActive === 'products' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-box-open m-1 {{menuActive === 'products' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Produtos' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
         @if(user.role === 'ADMIN' || user.role === 'SALESMAN')
-        <a href="{{ route('sales.get') }}" class="w-full flex items-center {{menuActive === 'sales' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('sales.get') }}" class="w-full flex items-center hover:border-l-4 {{ menuActive === 'sales' ? '' : 'hover:border-gray-400 transition-all' }} {{menuActive === 'sales' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-cash-register m-1 {{menuActive === 'sales' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Vendas' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
         @if(user.role === 'ADMIN')
-        <a href="{{ route('accounts.get') }}" class="w-full flex items-center {{menuActive === 'accounts' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
+        <a href="{{ route('accounts.get') }}" class="w-full flex items-center hover:border-l-4 {{ menuActive === 'accounts' ? '' : 'hover:border-gray-400 transition-all' }} {{menuActive === 'accounts' ? 'text-dark-gray dark:text-white border-l-4 border-primary-400' : 'text-gray-400'}} py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'">
             <i class="fas fa-users m-1 {{menuActive === 'accounts' ? 'ml-0' : ''}}"></i>
             <span x-text="drawer ? 'Contas' : ''" x-bind:class="drawer ? 'ml-3' : ''"></span>
         </a>
         @endif
     </nav>
     <div class="h-full"></div>
-    <button type="button" class="w-full flex items-center text-dark-gray dark:text-white py-3 pl-6 nav-item" x-bind:class="drawer ? 'pr-16' : 'pr-6'" x-on:click="dark = !dark">
+    <button type="button" class="group w-full flex items-center text-dark-gray dark:text-white hover:text-gray-700 dark:hover:text-gray-400 py-3 pl-6 nav-item transition-all" x-bind:class="drawer ? 'pr-16' : 'pr-6'" x-on:click="dark = !dark">
         <i x-cloak x-show="dark" class="m-1 fas fa-moon"></i>
         <i x-cloak x-show="!dark" class="m-1 fas fa-sun"></i>
-        <span class="whitespace-nowrap" x-bind:class="drawer ? 'ml-3' : ''" x-text="drawer ? 'Modo escuro' : ''"></span>
+        <span class="whitespace-nowrap" x-bind:class="drawer ? 'ml-4' : ''" x-text="drawer ? 'Modo escuro' : ''"></span>
     </button>
 </aside>
