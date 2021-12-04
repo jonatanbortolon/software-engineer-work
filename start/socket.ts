@@ -17,6 +17,20 @@ Ws.io.on('connection', (socket) => {
     Ws.usersOnline[data.id] = socket
   })
 
+  socket.on('disconnect', function () {
+    let id = 0
+
+    Object.keys(Ws.usersOnline).forEach((user) => {
+      if (Ws.usersOnline[user] === socket) {
+        id = Number(user)
+      }
+    })
+
+    if (id > 0) {
+      delete Ws.usersOnline[id]
+    }
+  })
+
   //Message Route
   socket.on(
     'message',
