@@ -38,7 +38,28 @@
 <header x-data="{ headerOpen: false }" class="w-full bg-primary-400 dark:bg-dark-light py-5 px-6 sm:hidden">
     <div class="flex items-center justify-between">
         <a class="text-white dark:text-primary-400 text-3xl font-semibold uppercase">Gestaco</a>
-        <button x-on:click="headerOpen = !headerOpen" class="text-white text-3xl focus:outline-none">
+        <div x-data="{ notificationOpen: false }" class="ml-auto mr-5 flex justify-end" x-on:mousedown.away="notificationOpen = false">
+            <button x-on:click="notificationOpen = !notificationOpen; if (notificationOpen && headerOpen) headerOpen = false;" class="group relative z-10 w-12 h-12 rounded-full overflow-hidden focus:outline-none">
+                <div x-show="notifications.length > 0" class="absolute top-3 right-3 w-2 h-2 bg-red-600 rounded-full"></div>
+                <i class="fas fa-bell text-white text-3xl group-hover:animate-bell-ring"></i>
+            </button>
+            <div x-cloak x-show="notificationOpen" class="absolute top-[88px] left-0 right-0 bottom-0 flex flex-col w-full overflow-y-auto z-40 bg-white dark:bg-dark-light py-2 px-4 transition-all" x-transition>
+                <div x-show="notifications.length === 0" class="w-full text-center">
+                    <span class="text-black dark:text-white">Você não tem notificações!</span>
+                </div>
+                <template x-for="notification in notifications">
+                    <div class="h-full flex flex-row">
+                        <span x-text="notification.title" class="dark:text-white"></span>
+                        <form action="{{ route('notifications.update', { id: ':notification' }) }}" x-on:submit.prevent="$event.target.action = $event.target.action.replace(':notification', notification.id); $event.target.submit()" method="POST">
+                            <button x-show="!notification.readAt" type="submit" class="ml-4">
+                                <i class="fas fa-check text-green-500 transition-all hover:text-green-600"></i>
+                            </button>
+                        </form>
+                    </div>
+                </template>
+            </div>
+        </div>
+        <button x-on:click="headerOpen = !headerOpen" class="text-white text-3xl focus:outline-none w-[48px] h-[48px]">
             <i x-cloak x-show="!headerOpen" class="fas fa-bars"></i>
             <i x-cloak x-show="headerOpen" class="fas fa-times"></i>
         </button>

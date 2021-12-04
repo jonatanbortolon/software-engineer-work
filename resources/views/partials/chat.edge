@@ -7,8 +7,8 @@
             <i class="fas fa-times text-white dark:text-dark-light cursor-pointer" x-on:click="chatOpen = false"></i>
             <span class="text-white dark:text-dark-light ml-auto">Chat da equipe</span>
         </div>
-        <div class="w-full h-full flex flex-col overflow-y-auto my-3 scrollbar scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent" id="chatscroll">
-            <template x-for="message in chat">
+        <div class="w-full h-full flex flex-col overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent" id="chatscroll">
+            <template x-for="(message, index) in chat">
                 <div class="flex flex-col bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-2xl mb-3 max-w-[80%]" x-bind:class='String(message.from.id) === String({{{ JSON.stringify(user) }}}.id) ? "mr-2 ml-auto" : "ml-2"'>
                     <div class="flex flex-row items-center justify-start w-full">
                         <button x-show='String(message.from.id) !== String({{{ JSON.stringify(user) }}}.id)' class="w-8 h-8 mr-2 rounded-full overflow-hidden focus:outline-none">
