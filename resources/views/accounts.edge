@@ -3,13 +3,11 @@
 @set('menuActive', 'accounts')
 @section('content')
 <main class="w-full flex-grow p-6">
-    <h1 class="text-3xl text-black dark:text-white pb-6">Produtos</h1>
-
     <div class="w-full">
         <div class="mt-6" x-data="{ openCreate: false }">
             <button class="px-4 py-2 mb-3 text-white dark:text-dark-dark bg-green-500 transition-all hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openCreate = true">Criar link para cadastro<i class="fas fa-plus ml-2"></i></button>
             
-            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openCreate"  >
+            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openCreate" x-transition>
                 <div class="relative top-0 mx-auto p-5 border dark:border-none h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white dark:bg-dark-dark" x-on:mousedown.away="openCreate = false">
                     <div class="mt-3 sm:mt-0 sm:text-left">
                         <form action="{{ route('signuplinks.store') }}" method="POST">

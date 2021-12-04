@@ -222,7 +222,7 @@ export default class AuthController {
         return response.redirect().back()
       }
 
-      user.delete()
+      await user.delete()
 
       session.flash('success', 'Usuário removido!')
       return response.redirect().back()

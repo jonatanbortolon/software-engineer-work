@@ -119,7 +119,7 @@ export default class ClientsController {
 
       const client = await Client.findOrFail(params.id)
 
-      client.delete()
+      await client.delete()
 
       session.flash('success', 'Cliente removido!')
       return response.redirect().back()

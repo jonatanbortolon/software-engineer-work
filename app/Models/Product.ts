@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import {
-  afterDelete,
   BaseModel,
+  beforeDelete,
   beforeSave,
   BelongsTo,
   belongsTo,
@@ -64,7 +64,7 @@ export default class Product extends compose(BaseModel, SoftDeletes) {
     query.where('account_id', user)
   })
 
-  @afterDelete()
+  @beforeDelete()
   public static async deleteStocks(product: Product) {
     await product.load('stocks')
 

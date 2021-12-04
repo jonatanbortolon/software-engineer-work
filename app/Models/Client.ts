@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import {
-  afterDelete,
   BaseModel,
+  beforeDelete,
   beforeSave,
   BelongsTo,
   belongsTo,
@@ -94,7 +94,7 @@ export default class Client extends compose(BaseModel, SoftDeletes) {
     }
   }
 
-  @afterDelete()
+  @beforeDelete()
   public static async deleteSales(client: Client) {
     await client.load('sales')
 

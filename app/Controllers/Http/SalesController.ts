@@ -222,7 +222,7 @@ export default class SalesController {
 
       const sale = await Sale.findOrFail(params.id)
 
-      sale.delete()
+      await sale.delete()
 
       session.flash('success', 'Venda removida!')
       return response.redirect().back()

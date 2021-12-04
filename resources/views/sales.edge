@@ -9,7 +9,7 @@
         <div class="mt-6" x-data="{ openCreate: false }">
             <button type="button" class="px-4 py-2 mb-3 text-white dark:text-dark-dark bg-green-500 transition-all hover:bg-green-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openCreate = true">Cadastrar venda<i class="fas fa-plus ml-2"></i></button>
             
-            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openCreate">
+            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openCreate" x-transition>
                 <div class="relative top-0 mx-auto p-5 border dark:border-none h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white dark:bg-dark-dark" x-on:mousedown.away="openCreate = false">
                     <div class="mt-3 sm:mt-0 sm:text-left">
                         <form action="{{ route('sales.store') }}" method="POST" x-data="{ saleCreateClient: false }">
@@ -197,7 +197,7 @@
                                         <div class="mr-2" x-data="{ openUpdate{{ sale.id }}: false }">
                                             <button type="button" class="px-4 py-2 text-white dark:text-dark-light bg-blue-500 transition-all hover:bg-blue-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openUpdate{{ sale.id }} = true"><i class="fas fa-pen"></i></button>
                                             
-                                            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openUpdate{{ sale.id }}">
+                                            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openUpdate{{ sale.id }}" x-transition>
                                                 <div class="relative top-0 mx-auto p-5 border dark:border-none h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white dark:bg-dark-dark" x-on:mousedown.away="openUpdate{{ sale.id }} = false">
                                                     <div class="mt-3 sm:mt-0 sm:text-left">
                                                         <form action="{{ route('sales.update', { id: sale.id }) }}" method="POST">
@@ -324,9 +324,30 @@
                                             </div>
                                         </div>
                                         @if(user.role === 'ADMIN')
-                                        <form action="{{ route('sales.delete', { id: sale.id }) }}" method="POST">
+                                        {{--  <form action="{{ route('sales.delete', { id: sale.id }) }}" method="POST">
                                             <button type="submit" class="px-4 py-2 text-white dark:text-dark-light bg-red-500 transition-all hover:bg-red-600 rounded select-none no-outline focus:shadow-outline"><i class="fas fa-trash"></i></button>
-                                        </form>
+                                        </form>  --}}
+                                        <div class="mr-2" x-data="{ openDelete{{ sale.id }}: false }">
+                                            <button type="button" class="px-4 py-2 text-white dark:text-dark-light bg-red-500 transition-all hover:bg-red-600 rounded select-none no-outline focus:shadow-outline" x-on:click="openDelete{{ sale.id }} = true"><i class="fas fa-trash"></i></button>
+                                            <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full z-20" style="background-color: rgba(0,0,0,.5);" x-cloak x-show="openDelete{{ sale.id }}" x-transition>
+                                                <div class="relative top-0  mx-auto p-5 border dark:border-none h-full w-full md:h-auto md:w-4/6 shadow-lg rounded-md bg-white dark:bg-dark-dark" x-on:mousedown.away="openDelete{{ sale.id }} = false">
+                                                    <div class="mt-3 sm:mt-0 sm:text-left">
+                                                        <form action="{{ route('clients.delete', { id: sale.id }) }}" method="POST" class="text-center pt-12">
+                                                            <span class="text-3xl text-black dark:text-white">Tem certeza que deseja remover a venda?</span>
+                                                            <div class="mt-12">
+                                                                <button type="submit" class="px-4 py-3 bg-green-500 text-white dark:text-dark-dark rounded transition-all hover:bg-green-600 focus:outline-none focus:shadow-outline block w-full">Remover</button>
+                                                            </div>
+                                                            </form>
+                                                    </div>
+                                
+                                                    <div class="mt-2">
+                                                        <div>
+                                                            <button x-on:click="openDelete{{ sale.id }} = false" type="submit" class="px-4 py-3 bg-red-600 text-white dark:text-dark-dark rounded transition-all hover:bg-red-700 focus:outline-none focus:shadow-outline block w-full">Fechar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         @endif
                                     </div>
                                 </td>

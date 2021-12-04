@@ -129,7 +129,7 @@ export default class ProductsController {
 
       const product = await Product.findOrFail(params.id)
 
-      product.delete()
+      await product.delete()
 
       session.flash('success', 'Produto removido!')
       return response.redirect().back()
