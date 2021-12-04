@@ -47,7 +47,7 @@ export default class DashboardController {
 
       const date = year + '-' + (month < 10 ? '0' + month : month) + '-' + '10'
 
-      var formattedDate = DateTime.fromISO(date).setLocale('pt-BR').toFormat("LLLL 'de' yyyy")
+      let formattedDate = DateTime.fromISO(date).setLocale('pt-BR').toFormat("LLLL 'de' yyyy")
 
       formattedDate = formattedDate[0].toUpperCase() + formattedDate.slice(1)
 

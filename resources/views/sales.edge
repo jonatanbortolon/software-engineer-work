@@ -345,7 +345,7 @@ VMasker(addDocument).maskPattern("999.999.999-99")
 </script>
 <script>
 function inputHandler(masks, max, event) {
-	var c = event.target;
+	let c = event.target;
 	const v = c.value.replace(/\D/g, '');
 	const m = c.value.length > max ? 1 : 0;
 	VMasker(c).unMask();

@@ -24,7 +24,7 @@
               <label class="block text-gray-700 dark:text-white mb-4 relative">
                 Senha
                 <input x-bind:type="passwordVisible ? 'text' : 'password'" class="appearance-none border rounded px-4 py-3 block w-full outline-none dark:bg-dark-light dark:text-white dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500" placeholder="Digite aqui" name="password" required>
-                <div class="flex items-center justify-center absolute cursor-pointer right-0 top-6 w-50px h-50px text-black dark:text-white" x-on:click="passwordVisible = !passwordVisible">
+                <div class="flex items-center justify-center absolute cursor-pointer right-0 top-6 w-[50px] h-[50px] text-black dark:text-white" x-on:click="passwordVisible = !passwordVisible">
                   <i x-show="!passwordVisible" class="fas fa-eye"></i>
                   <i x-show="passwordVisible" class="fas fa-eye-slash"></i>
                 </div>
@@ -34,7 +34,7 @@
               </div>
             </form>
             <div class="mt-6 text-center text-sm">
-              <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block mb-2 md:mb-0 dark:text-white dark:hover:text-gray-300" href="{{ route('auth.signup.get') }}">Nao é cadastrado ainda? Crie uma conta!</a>
+              <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block mb-2 md:mb-0 dark:text-white dark:hover:text-gray-300" href="{{ route('auth.signup.get') }}">Não é cadastrado ainda? Crie uma conta!</a>
               {{--  <span class="text-gray-600 mx-1 hidden md:inline-block">·</span>
               <a class="text-gray-600 hover:text-gray-700 underline block md:inline-block" href="{{ route('auth.signup.get') }}">Esqueceu sua senha? Recupere agora</a>  --}}
             </div>

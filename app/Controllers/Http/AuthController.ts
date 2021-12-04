@@ -40,7 +40,7 @@ export default class AuthController {
           ? e.messages[Object.keys(e.messages)[0]]
           : e.responseText === 'E_INVALID_AUTH_PASSWORD: Password mis-match'
           ? 'Senha incorreta!'
-          : 'Usuário nao cadastrado!'
+          : 'Usuário não cadastrado!'
       )
       return response.redirect().back()
     }

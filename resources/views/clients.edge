@@ -91,13 +91,13 @@
                             </div>
                         </td>
                         <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm">
-                            <a class="text-gray-900 dark:text-white whitespace-no-wrap hover:text-blue-500 transition-all dark:hover:text-blue-500 transition-all" href="tel:{{client.phone}}">{{ client.formattedPhone ?? '-' }}</a>
+                            <a class="text-gray-900 dark:text-white whitespace-no-wrap hover:text-blue-500 dark:hover:text-blue-500 transition-all" href="tel:{{client.phone}}">{{ client.formattedPhone ?? '-' }}</a>
                         </td>
                         <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm">
                             <p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ client.formattedDocument ?? '-' }}</p>
                         </td>
                         <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm">
-                            <a class="text-gray-900 dark:text-white whitespace-no-wrap hover:text-blue-500 transition-all dark:hover:text-blue-500 transition-all" href="mailto:{{client.email}}">{{ client.email ?? '-'}}</a>
+                            <a class="text-gray-900 dark:text-white whitespace-no-wrap hover:text-blue-500 dark:hover:text-blue-500 transition-all" href="mailto:{{client.email}}">{{ client.email ?? '-'}}</a>
                         </td>
                         <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm">
                             <p class="text-gray-900 dark:text-white whitespace-no-wrap">
@@ -171,7 +171,7 @@ editDocuments.forEach(input => {
 </script>
 <script>
 function inputHandler(masks, max, event) {
-	var c = event.target;
+	let c = event.target;
 	const v = c.value.replace(/\D/g, '');
 	const m = c.value.length > max ? 1 : 0;
 	VMasker(c).unMask();

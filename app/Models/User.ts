@@ -60,6 +60,11 @@ export default class User extends BaseModel {
   })
 
   @computed()
+  public get chatSlug() {
+    return this.name.replace(/ /g, '')
+  }
+
+  @computed()
   public get formattedPhone() {
     if (this.phone) {
       const formatted = this.phone
@@ -71,6 +76,13 @@ export default class User extends BaseModel {
     } else {
       return null
     }
+  }
+
+  @beforeSave()
+  public static async formatName(client: Client) {
+    client.name = client.name
+      .toLowerCase()
+      .replace(/(^\w{1})|(\s{1}\w{1})/g, (match) => match.toUpperCase())
   }
 
   @beforeSave()

@@ -89,12 +89,18 @@ Route.group(() => {
       .as('accounts')
 
     Route.group(() => {
+      Route.post('/:id', 'NotificationsController.update').as('update')
+    })
+      .prefix('notificacoes')
+      .as('notifications')
+
+    Route.group(() => {
       Route.get('/signout', 'AuthController.signoutGet').as('signout.get')
       Route.post('/:id', 'AuthController.deleteParentPost').as('delete')
     })
       .prefix('user')
       .as('auth')
-  }).middleware(['userInfo', 'auth'])
+  }).middleware(['auth', 'userInfo'])
 
   Route.group(() => {
     Route.group(() => {

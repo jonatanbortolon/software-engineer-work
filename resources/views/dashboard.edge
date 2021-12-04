@@ -54,8 +54,8 @@
     </div>
 </main>
 <script>
-    var productsChart = document.getElementById('productsChart');
-    var myChart = new Chart(productsChart, {
+    let productsChart = document.getElementById('productsChart');
+    let myChart = new Chart(productsChart, {
         type: 'bar',
         data: {
             labels: ({{{ JSON.stringify(productsChart) }}}).map(product => product.name),
@@ -101,8 +101,8 @@
         }
     });
 
-    var billingsChart = document.getElementById('billingsChart');
-    var myLineChart = new Chart(billingsChart, {
+    let billingsChart = document.getElementById('billingsChart');
+    let myLineChart = new Chart(billingsChart, {
         type: 'line',
         data: {
             labels: Object.keys({{{ JSON.stringify(billingsChart) }}}).map(period => period),
