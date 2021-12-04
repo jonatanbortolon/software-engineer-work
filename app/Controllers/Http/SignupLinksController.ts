@@ -36,7 +36,7 @@ export default class SignupLinksController {
       await SignupLink.create({
         role,
         slug: uuidv4(),
-        expiresAt: DateTime.now().plus({ minutes: 10 }),
+        expiresAt: DateTime.now().plus({ minutes: 30 }),
         accountId: auth.use('web').user!.accountId,
       })
 

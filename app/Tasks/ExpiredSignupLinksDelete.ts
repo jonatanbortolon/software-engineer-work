@@ -19,7 +19,7 @@ export default class ExpiredLinksDelete extends BaseTask {
     try {
       Logger.info('Task ExpiredLinksDelete started!')
 
-      await SignupLink.query().where('created_at', '<', DateTime.now().toISO()).delete()
+      await SignupLink.query().where('expires_at', '<', DateTime.now().toISO()).delete()
 
       Logger.info('Task ExpiredLinksDelete success!')
     } catch (e) {
