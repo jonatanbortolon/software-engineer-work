@@ -1,4 +1,4 @@
-<div x-data="{ chatOpen: false, mentionOpen: false, mentionPosition: { x: 0, y: 0 }, mentionSearch: '' }" x-on:mousedown.away="chatOpen = false" x-init="$watch('chat', function(chat) {const scroll = document.getElementById('chatscroll'); scroll.scrollTo({ top: scroll.scrollHeight, behavior: 'smooth' })}); $watch('chatOpen', function(open) {if (open) {$nextTick(function() {const scroll = document.getElementById('chatscroll'); scroll.scrollTo({ top: scroll.scrollHeight, behavior: 'smooth' })})}})" x-on:open-mention.window="if (!mentionOpen) {mentionOpen = true; mentionPosition = $event.detail.position;} mentionSearch = $event.detail.search;" x-on:close-mention.window="mentionOpen = false; mentionPosition = { x: 0, y: 0 }; mentionSearch = ''">
+<div x-data="{ chatOpen: false, mentionOpen: false, mentionSearch: '', cancelInputBlur: false }" x-on:mousedown.away="chatOpen = false" x-init="$watch('chat', function(chat) {const scroll = document.getElementById('chatscroll'); scroll.scrollTo({ top: scroll.scrollHeight, behavior: 'smooth' })}); $watch('chatOpen', function(open) {if (open) {$nextTick(function() {const scroll = document.getElementById('chatscroll'); scroll.scrollTo({ top: scroll.scrollHeight, behavior: 'smooth' })})}})" x-on:open-mention.window="if (!mentionOpen) {mentionOpen = true;} mentionSearch = $event.detail.search;" x-on:close-mention.window="mentionOpen = false; mentionSearch = ''">
     <div x-cloak x-show="!chatOpen" class="cursor-pointer w-16 h-16 bg-primary-400 rounded-full flex items-center justify-center fixed bottom-3 right-3" x-on:click="chatOpen = true">
         <i class="fas fa-comment text-white dark:text-dark-light"></i>
     </div>
@@ -26,7 +26,7 @@
         <div class="flex flex-row relative">
             <div x-show="mentionOpen" class="absolute top-[-80%] w-full left-0 bg-primary-400 rounded-t overflow-y-auto">
                 <template x-for='(mention, index) in {{{ JSON.stringify(usersMention) }}}.filter(mention => mention.slug.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(mentionSearch.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()))'>
-                    <div class="cursor-pointer px-4 py-2 hover:bg-primary-600" x-bind:class="index === 0 ? 'rounded-t' : ''" x-on:click="mentionOpen = false; mentionPosition = { x: 0, y: 0 }; mentionSearch = ''; insertMention(mention.slug, mention.id)">
+                    <div class="cursor-pointer px-4 py-2 hover:bg-primary-600" x-bind:class="index === 0 ? 'rounded-t' : ''" x-on:mousedown="$event.preventDefault(); mentionOpen = false; mentionSearch = ''; insertMention(mention.slug, mention.id);">
                         <span x-text="mention.name" class="text-black"></span>
                     </div>
                 </template>

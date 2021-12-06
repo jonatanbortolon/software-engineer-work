@@ -66,275 +66,17 @@ let socket = io();
 let messageInput = document.getElementById('messageinput');
 let messageButton = document.getElementById('messagebutton');
 
-messageInput.addEventListener('input', updateEditor);
-
 let mentions = [];
 
-function getTextSegments(element) {
-    const textSegments = [];
-    
-    Array.from(element.childNodes).forEach((node) => {
-        switch(node.nodeType) {
-            case Node.TEXT_NODE:
-                textSegments.push({text: node.nodeValue, node});
-                break;
-                
-            case Node.ELEMENT_NODE:
-                textSegments.splice(textSegments.length, 0, ...(getTextSegments(node)));
-                break;
-                
-            default:
-                throw new Error(`Unexpected node type: ${node.nodeType}`);
-        }
-    });
-    
-    return textSegments;
-}
-
-
-function updateEditor() {
-    const sel = window.getSelection();
-
-    const textSegments = getTextSegments(messageInput);
-
-    const textContent = textSegments.map(({text}) => text).join('');
-
-    let anchorIndex = null;
-    let focusIndex = null;
-    let currentIndex = 0;
-
-    textSegments.forEach(({text, node}) => {
-        if (node === sel.anchorNode) {
-            anchorIndex = currentIndex + sel.anchorOffset;
-        }
-
-        if (node === sel.focusNode) {
-            focusIndex = currentIndex + sel.focusOffset;
-        }
-
-        currentIndex += text.length;
-    });
-    
-    messageInput.innerHTML = renderText(textContent);
-    
-    restoreSelection(anchorIndex, focusIndex);
-}
-
-function insertMention(slug, id) {
-    const sel = window.getSelection();
-
-    const textSegments = getTextSegments(messageInput);
-
-    const textContent = textSegments.map(({text}) => text).join('');
-
-    let anchorIndex = null;
-    let focusIndex = null;
-    let currentIndex = 0;
-
-    textSegments.forEach(({text, node}) => {
-        if (node === sel.anchorNode) {
-            anchorIndex = currentIndex + sel.anchorOffset;
-        }
-
-        if (node === sel.focusNode) {
-            focusIndex = currentIndex + sel.focusOffset;
-        }
-
-        currentIndex += text.length;
-    });
-
-    const result = insertText(currentIndex, slug, textContent, id);
-    
-    messageInput.innerHTML = result.text;
-
-    restoreSelection(result.finalIndex, result.finalIndex);
-}
-
-function restoreSelection(absoluteAnchorIndex, absoluteFocusIndex) {
-    const sel = window.getSelection();
-
-    const textSegments = getTextSegments(messageInput);
-
-    let anchorNode = messageInput;
-    let anchorIndex = 0;
-    let focusNode = messageInput;
-    let focusIndex = 0;
-    let currentIndex = 0;
-
-    textSegments.forEach(({text, node}) => {
-        const startIndexOfNode = currentIndex;
-
-        const endIndexOfNode = startIndexOfNode + text.length;
-
-        if (startIndexOfNode <= absoluteAnchorIndex && absoluteAnchorIndex <= endIndexOfNode) {
-            anchorNode = node;
-            anchorIndex = absoluteAnchorIndex - startIndexOfNode;
-        }
-
-        if (startIndexOfNode <= absoluteFocusIndex && absoluteFocusIndex <= endIndexOfNode) {
-            focusNode = node;
-            focusIndex = absoluteFocusIndex - startIndexOfNode;
-        }
-
-        currentIndex += text.length;
-    });
-    
-    sel.setBaseAndExtent(anchorNode,anchorIndex,focusNode,focusIndex);
-}
-
-function renderText(text) {
-    mentions = [];
-
-    const words = text.split(/(\s+)/);
-
-    const output = words.map((word) => {
-        if (word.match(/^\@[a-zA-Z]+$/g)) {
-            var event = new CustomEvent('open-mention', {
-                bubbles: true,
-                detail: { 
-                    position: getCaretPosition(),
-                    search: word.substring(1)
-                },
-            });
-
-            window.dispatchEvent(event);
-            
-            const user = {{{ JSON.stringify(usersMention) }}}.find(function(user) {return "@" + user.slug === word});
-
-            if (user) {
-                mentions.push(user.id);
-
-                return `<span class='text-blue-500'>${word}</span>`;
-            } else {
-                return word
-            }
-        }
-        else {
-            var event = new CustomEvent('close-mention', {
-                bubbles: true,
-            });
-
-            window.dispatchEvent(event);
-
-            return word;
-        }
-    })
-    
-    return output.join('');
-}
-
-function insertText(index, insertText, text, id) {
-    mentions = [];
-
-    const words = text.split(/(\s+)/);
-
-    const lengths = words.map(function(word) {return word.length});
-
-    let finalIndex = 0;
-
-    const output = words.map(function(word, position) {
-        if (word.match(/^\@[a-zA-Z]+$/g)) {
-            if (lengths.slice(0, position).reduce(function(previousValue, currentValue) {return previousValue + currentValue},0) < index && index <= lengths.slice(0, position + 1).reduce(function(previousValue, currentValue) {return previousValue + currentValue},0)) {
-                mentions.push(id);
-                
-                lengths[position] = insertText.length;
-
-                finalIndex = lengths.slice(0, position + 1).reduce(function(previousValue, currentValue) {return previousValue + currentValue}, 0) + 1;
-
-                return `<span class='text-blue-500'>@${insertText}</span>`;
-            }
-            
-            var event = new CustomEvent('open-mention', {
-                bubbles: true,
-                detail: { 
-                    position: getCaretPosition(),
-                    search: word.substring(1)
-                },
-            });
-
-            window.dispatchEvent(event);
-
-            const user = {{{ JSON.stringify(usersMention) }}}.find(function(user) {return "@" + user.slug === word});
-
-            if (user) {
-                mentions.push(user.id);
-
-                return `<span class='text-blue-500'>${word}</span>`;
-            } else {
-                return word;
-            }
-        } else {
-            var event = new CustomEvent('close-mention', {
-                bubbles: true,
-            });
-
-            window.dispatchEvent(event);
-
-            return word;
-        }
-    })
-    
-    return { text: output.join(''), finalIndex: finalIndex};
-}
-
-function getCaretPosition() {
-    let x = 0;
-    let y = 0;
-
-    const isSupported = typeof window.getSelection !== "undefined";
-
-    if (isSupported) {
-        const selection = window.getSelection();
-
-        if (selection.rangeCount !== 0) {
-            const range = selection.getRangeAt(0).cloneRange();
-
-            range.collapse(true);
-
-            const rect = range.getClientRects()[0];
-
-            if (rect) {
-                x = rect.left;
-                y = rect.top;
-            }
-        }
-    }
-
-    return { x, y };
-}
-
-function getCaretIndex() {
-  let position = 0;
-
-  const isSupported = typeof window.getSelection !== "undefined";
-
-  if (isSupported) {
-    const selection = window.getSelection();
-
-    if (selection.rangeCount !== 0) {
-      const range = window.getSelection().getRangeAt(0);
-
-      const preCaretRange = range.cloneRange();
-
-      preCaretRange.selectNodeContents(messageInput);
-
-      preCaretRange.setEnd(range.endContainer, range.endOffset);
-
-      position = preCaretRange.toString().length;
-    }
-  }
-  return position;
-}
-
-messageInput.addEventListener('keydown', function (e) {
-    if(e.keyCode==13) {
+messageInput.addEventListener('keydown', function (event) {
+    if(event.keyCode==13) {
         if (messageInput.innerHTML !== '') {
             socket.emit('message', { room: {{{ JSON.stringify(user) }}}.account_id, message: {from: {{ user.id }}, message: messageInput.innerHTML, mentions: mentions}});
 
             messageInput.innerHTML = '';
         }
-    } else if (e.keyCode === 188 || e.keyCode === 190) {
-        e.preventDefault();
+    } else if (event.keyCode === 188 || event.keyCode === 190) {
+        event.preventDefault();
     }
 });
 
@@ -371,6 +113,150 @@ socket.on('notification', function(data) {
 socket.on('error', function(error) {
     toastr.error(error, 'Erro')
 })
+</script>
+<script>
+let caretIndex = 0;
+
+function markMentions() {
+    mentions = [];
+
+    const text = messageInput.innerHTML.replace(/<\/?span>/gi, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+
+    let textArr = text.split(' ');
+    
+    textArr = textArr.map(function(word) {
+        if (/^\@[a-z]+/gi.exec(word)) {
+            let event = new CustomEvent('open-mention', {
+                bubbles: true,
+                detail: { 
+                    search: word.substring(1)
+                },
+            });
+
+            window.dispatchEvent(event);
+
+            const user = {{{ JSON.stringify(usersMention) }}}.find(function(user) {return '@' + user.slug === word || '&nbsp;@' + user.slug === word || '@' + user.slug + '&nbsp;' === word || '&nbsp;@' + user.slug + '&nbsp;' === word});
+
+            if (user) {
+                mentions.push(user.id);
+
+                return `<span class='text-blue-500'>${word}</span>`;
+            } else {
+                return word;
+            }
+        } else {
+            let event = new CustomEvent('close-mention', {
+                bubbles: true,
+            });
+
+            window.dispatchEvent(event);
+
+            return word;
+        }
+    })
+    
+    messageInput.innerHTML = textArr.join(' ');
+
+    setEndOfContenteditable(messageInput);
+}
+
+function insertMention(slug, mentionId) {
+    mentions = [];
+
+    const text = messageInput.innerHTML.replace(/<\/?span>/gi, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+
+    let textArr = text.split(' ');
+
+    const lengths = textArr.map(function(word) {return word.length});
+
+    textArr = textArr.map(function(word, index) {
+        if (lengths.slice(0, index).reduce(function(previousValue, currentValue) {return previousValue + currentValue}, 0) < caretIndex && caretIndex <= lengths.slice(0, index + 1).reduce(function(previousValue, currentValue) {return previousValue + currentValue}, 0) + lengths.length) {
+            mentions.push(mentionId);
+            
+            return `@${slug}`;
+        } else {
+            return word;
+        }
+    })
+    
+    messageInput.innerHTML = textArr.join(' ');
+
+    markMentions();
+}
+
+["mouseup", "keyup"].forEach(function(eventName){
+    messageInput.addEventListener(eventName, function(event) {
+        caretIndex = getCaretIndex(event.target);
+    });
+});
+
+messageInput.addEventListener('input', markMentions);
+
+function setEndOfContenteditable(element) {
+    let range;
+
+    let selection;
+
+    if(document.createRange) {
+        range = document.createRange();
+
+        range.selectNodeContents(element);
+
+        range.collapse(false);
+
+        selection = window.getSelection();
+
+        selection.removeAllRanges();
+
+        selection.addRange(range);
+    } else if(document.selection) { 
+        range = document.body.createTextRange();
+
+        range.moveToElementText(element);
+
+        range.collapse(false);
+
+        range.select();
+    }
+}
+
+function getCaretIndex(element) {
+    let caretOffset = 0;
+
+    let doc = element.ownerDocument || element.document;
+
+    let win = doc.defaultView || doc.parentWindow;
+
+    let sel;
+
+    if (typeof win.getSelection != "undefined") {
+        sel = win.getSelection();
+
+        if (sel.rangeCount > 0) {
+            let range = win.getSelection().getRangeAt(0);
+
+            let preCaretRange = range.cloneRange();
+
+            preCaretRange.selectNodeContents(element);
+
+            preCaretRange.setEnd(range.endContainer, range.endOffset);
+
+            caretOffset = preCaretRange.toString().length;
+        }
+    } else if ( (sel = doc.selection) && sel.type != "Control") {
+        let textRange = sel.createRange();
+
+        let preCaretTextRange = doc.body.createTextRange();
+
+        preCaretTextRange.moveToElementText(element);
+
+        preCaretTextRange.setEndPoint("EndToEnd", textRange);
+
+        caretOffset = preCaretTextRange.text.length;
+    }
+
+    return caretOffset;
+}
 </script>
 <script>
 const flashSuccessMessage = ({{{ flashMessages.has('success') }}});
