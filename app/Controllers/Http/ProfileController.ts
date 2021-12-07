@@ -44,14 +44,19 @@ export default class ProfilesController {
         return response.redirect().back()
       }
 
-      await user
-        .merge({
-          name: name,
-          phone: phone,
-          email: email,
+      const unsavedUser = user.merge({
+        name: name,
+        phone: phone,
+        email: email,
+      })
+
+      if (password) {
+        unsavedUser.merge({
           password: password,
         })
-        .save()
+      }
+
+      await unsavedUser.save()
 
       session.flash('success', 'Perfil alterado!')
       return response.redirect().back()

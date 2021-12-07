@@ -86,10 +86,12 @@ function inputHandler(masks, max, event) {
 }
 
 const telMask = ['(99) 9999-99999', '(99) 99999-9999'];
-const addPhone = document.querySelector('input[id=editphone]');
+const editPhone = document.querySelector('input[id=editphone]');
 
-VMasker(addPhone).maskPattern(telMask[0]);
+const phone = editPhone.value;
 
-addPhone.addEventListener('input', inputHandler.bind(undefined, telMask, 14), false);
+VMasker(editPhone).maskPattern(telMask[phone.length > 10 ? 1 : 0]);
+
+editPhone.addEventListener('input', inputHandler.bind(undefined, telMask, 14), false);
 </script>
 @endsection
