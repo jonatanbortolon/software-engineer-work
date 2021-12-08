@@ -9,7 +9,6 @@ export default class NotificationsController {
         session.flash('error', 'Forneça um produto!')
         return response.redirect().back()
       }
-      console.log(params.id)
 
       const notification = await Notification.findOrFail(params.id)
 
