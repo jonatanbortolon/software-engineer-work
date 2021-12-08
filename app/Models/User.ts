@@ -10,10 +10,13 @@ import {
   computed,
   BelongsTo,
   belongsTo,
+  afterFetch,
+  afterFind,
 } from '@ioc:Adonis/Lucid/Orm'
 import Client from './Client'
 import Product from './Product'
 import Account from './Account'
+import Sale from './Sale'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -51,6 +54,9 @@ export default class User extends BaseModel {
 
   @hasMany(() => Product)
   public products: HasMany<typeof Product>
+
+  @hasMany(() => Sale, { foreignKey: 'salesmanId' })
+  public sales: HasMany<typeof Sale>
 
   @belongsTo(() => Account)
   public account: BelongsTo<typeof Account>
@@ -97,5 +103,87 @@ export default class User extends BaseModel {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
+  }
+
+  @afterFetch()
+  public static async getTotalSalesValueFetch(users: User[]) {
+    for (const user of users) {
+      await user.load('sales')
+
+      let totalValue = 0
+
+      for (const sale of user.sales ?? []) {
+        await sale.load('products')
+
+        const total = sale.products?.reduce((carry, product) => {
+          const productTotal = product.price * product.$extras.pivot_quantity
+
+          return carry + productTotal
+        }, 0)
+
+        totalValue += total
+      }
+
+      const formatter = new Intl.NumberFormat('pt-br', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+
+      const formattedTotal = formatter.format(totalValue / 100)
+
+      user.$extras.formattedTotalSales = formattedTotal
+    }
+  }
+
+  @afterFind()
+  public static async getTotalSalesValueFind(user: User) {
+    await user.load('sales')
+
+    let totalValue = 0
+
+    for (const sale of user.sales ?? []) {
+      await sale.load('products')
+
+      const total = sale.products?.reduce((carry, product) => {
+        const productTotal = product.price * product.$extras.pivot_quantity
+
+        return carry + productTotal
+      }, 0)
+
+      totalValue += total
+    }
+
+    const formatter = new Intl.NumberFormat('pt-br', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+
+    const formattedTotal = formatter.format(totalValue / 100)
+
+    user.$extras.formattedTotalSales = formattedTotal
+  }
+
+  @afterFetch()
+  public static async getTotalSalesQuantityFetch(users: User[]) {
+    for (const user of users) {
+      await user.load('sales')
+
+      let total = user.sales.length ?? 0
+
+      user.$extras.TotalSalesQuantity = total
+    }
+  }
+
+  @afterFind()
+  public static async getTotalSalesQuantityFind(user: User) {
+    await user.load('sales')
+
+    let total = user.sales.length ?? 0
+
+    user.$extras.TotalSalesQuantity = total
   }
 }

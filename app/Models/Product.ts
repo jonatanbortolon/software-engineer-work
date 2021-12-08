@@ -41,6 +41,12 @@ export default class Product extends compose(BaseModel, SoftDeletes) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  @hasMany(() => Stock)
+  public stocks: HasMany<typeof Stock>
+
+  @manyToMany(() => Sale, { pivotColumns: ['quantity'] })
+  public sales: ManyToMany<typeof Sale>
+
   @computed()
   public get formattedPrice() {
     const formatter = new Intl.NumberFormat('pt-br', {
@@ -74,10 +80,4 @@ export default class Product extends compose(BaseModel, SoftDeletes) {
       await stock.delete()
     }
   }
-
-  @hasMany(() => Stock)
-  public stocks: HasMany<typeof Stock>
-
-  @manyToMany(() => Sale, { pivotColumns: ['quantity'] })
-  public sales: ManyToMany<typeof Sale>
 }

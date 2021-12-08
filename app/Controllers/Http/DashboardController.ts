@@ -1,6 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Client from 'App/Models/Client'
+import Product from 'App/Models/Product'
 import Sale from 'App/Models/Sale'
+import User from 'App/Models/User'
 import { DateTime } from 'luxon'
 
 export default class DashboardController {
@@ -60,6 +62,18 @@ export default class DashboardController {
       return carry
     }, {})
 
+    const productsLucrativeChart = (
+      await Product.query()
+        .withScopes((scopes) => scopes.accountScope(auth.user!.accountId))
+        .withAggregate('sales', (query) => {
+          query.whereNull('sales.deleted_at').sum('product_sale.quantity').as('total_sold')
+        })
+        .whereHas('sales', (query) => query.where('product_sale.quantity', '>', 0))
+    ).map((product) => ({
+      name: product.name,
+      total: product.$extras.total_sold * product.price,
+    }))
+
     const clientsChart = (
       await Client.query()
         .withScopes((scope) => scope.accountScope(auth.user!.accountId))
@@ -94,10 +108,22 @@ export default class DashboardController {
       .filter((client) => client.total > 0)
       .sort((client, posClient) => posClient.total - client.total)
 
+    const salesmansChart = (
+      await User.query()
+        .withScopes((scopes) => scopes.accountScope(auth.user!.accountId))
+        .has('sales', '>', 0)
+    ).map((salesman) => ({
+      name: salesman.name,
+      quantity: salesman.$extras.TotalSalesQuantity,
+      value: salesman.$extras.formattedTotalSales,
+    }))
+
     return view.render('dashboard', {
       productsChart: productsChart,
       billingsChart: billingsChart,
+      productsLucrativeChart: productsLucrativeChart,
       clientsChart: clientsChart,
+      salesmansChart: salesmansChart,
     })
   }
 }
