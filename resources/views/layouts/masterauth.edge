@@ -63,6 +63,10 @@
     </div>
 </body>
 <script>
+var connected = false;
+const RETRY_INTERVAL = 10000;
+var timeout;
+
 let socket = io();
 
 let messageInput = document.getElementById('messageinput');
@@ -91,6 +95,8 @@ messageButton?.addEventListener('click', function(event) {
 })
 
 socket.on('connect',function(){
+    clearTimeout(timeout);
+
     socket.emit('setup', {room: {{{ JSON.stringify(user) }}}.account_id, id: {{{ JSON.stringify(user) }}}.id});
 })
 
@@ -112,9 +118,25 @@ socket.on('notification', function(data) {
     window.dispatchEvent(event);
 })
 
+socket.on('disconnect', function() {
+    connected = false;
+    
+    reconnect(RETRY_INTERVAL);
+});
+
 socket.on('error', function(error) {
-    toastr.error(error, 'Erro')
+    connected = false;
+
+    reconnect(RETRY_INTERVAL);
 })
+
+function reconnect(time) {
+    timeout = setTimeout(function() {
+        if (!connected) {
+            reconnect(time);
+        }
+    }, time);
+}
 </script>
 <script>
 let caret = new VanillaCaret(messageInput);
