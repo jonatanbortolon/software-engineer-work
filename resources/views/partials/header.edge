@@ -2,9 +2,11 @@
 <header class="w-full items-center bg-white dark:bg-dark-light py-2 px-6 hidden sm:flex">
     <div class="w-1/2"></div>
     <div x-data="{ notificationOpen: false }" class="relative ml-auto mr-5 flex justify-end" x-on:mousedown.away="notificationOpen = false">
-        <button x-on:click="notificationOpen = !notificationOpen" class="group relative z-10 w-12 h-12 rounded-full overflow-hidden focus:outline-none">
+        <button x-on:click="notificationOpen = !notificationOpen" class="relative z-10 w-12 h-12 rounded-full overflow-hidden focus:outline-none">
             <div x-show="notifications.length > 0" class="absolute top-3 right-3 w-2 h-2 bg-red-600 rounded-full"></div>
-            <i class="fas fa-bell text-dark-gray dark:text-white group-hover:animate-bell-ring"></i>
+            <div x-bind:class="notifications.length > 0 ? 'animate-bell-ring' : ''">
+                <i class="fas fa-bell text-dark-gray dark:text-white"></i>
+            </div>
         </button>
         <div x-cloak x-show="notificationOpen" class="absolute flex flex-col w-80 bg-white dark:bg-dark-light rounded-lg shadow-lg py-2 px-4 mt-16 transition-all" x-transition>
             <div x-show="notifications.length === 0" class="w-full text-center">
