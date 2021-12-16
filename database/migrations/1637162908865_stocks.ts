@@ -12,7 +12,7 @@ export default class Stocks extends BaseSchema {
         .enum('type', ['INCREASE', 'DECREASE'], {
           useNative: true,
           enumName: 'stock_type',
-          existingType: false,
+          existingType: true,
         })
         .defaultTo('INCREASE')
       table.integer('quantity')
