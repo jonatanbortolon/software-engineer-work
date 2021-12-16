@@ -108,13 +108,13 @@
                             <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm"><p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ account.formattedPhone ?? '-' }}</p></td>
                             <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm"><p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ JSON.parse('{"ADMIN":"Administrador","SALESMAN":"Vendedor","STOCKIST":"Estoquista"}')[account.role] }}</p></td>
                             <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm"><p class="text-gray-900 dark:text-white whitespace-no-wrap">{{ account.createdAt.setLocale('pt-BR').toFormat('dd \'de\' LLL \'de\' yyyy \'as\' HH:mm') }}</p></td>
-                            <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm">
-                                {{--  @if(user.role === 'ADMIN')
+                            {{--  <td class="px-5 py-3 border-b border-gray-200 dark:border-none bg-white dark:bg-dark-light text-sm">
+                                @if(user.role === 'ADMIN')
                                 <form action="{{ route('auth.delete', { id: account.id }) }}" method="POST">
                                     <button type="submit" class="px-4 py-2 text-white dark:text-dark-dark bg-red-500 transition-all hover:bg-red-600 rounded select-none no-outline focus:shadow-outline"><i class="fas fa-trash"></i></button>
                                 </form>
-                                @endif  --}}
-                            </td>
+                                @endif
+                            </td>  --}}
                         </tr>
                     @endeach
                 </tbody>
