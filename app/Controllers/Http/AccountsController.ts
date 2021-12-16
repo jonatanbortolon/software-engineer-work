@@ -6,7 +6,12 @@ import User from 'App/Models/User'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class AccountsController {
-  public async index({ view, auth }: HttpContextContract) {
+  public async index({ response, view, auth, session }: HttpContextContract) {
+    if (auth.user!.role !== 'ADMIN') {
+      session.flash('error', 'Você não tem permissão!')
+      return response.redirect().back()
+    }
+
     const link = await SignupLink.query()
       .withScopes((scope) => scope.accountScope(auth.user!.accountId))
       .orderBy('expires_at', 'desc')
