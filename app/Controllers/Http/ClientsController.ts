@@ -119,6 +119,13 @@ export default class ClientsController {
 
       const client = await Client.findOrFail(params.id)
 
+      await client.load('sales')
+
+      if (client.sales.length > 0) {
+        session.flash('error', 'Esse cliente está associado a uma ou mais vendas!')
+        return response.redirect().back()
+      }
+
       await client.delete()
 
       session.flash('success', 'Cliente removido!')

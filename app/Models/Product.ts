@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import {
   BaseModel,
-  beforeDelete,
   beforeSave,
   BelongsTo,
   belongsTo,
@@ -69,15 +68,4 @@ export default class Product extends compose(BaseModel, SoftDeletes) {
   public static accountScope = scope((query, user: number) => {
     query.where('account_id', user)
   })
-
-  @beforeDelete()
-  public static async deleteStocks(product: Product) {
-    await product.load('stocks')
-
-    const stocks = product.stocks ?? []
-
-    for (const stock of stocks) {
-      await stock.delete()
-    }
-  }
 }

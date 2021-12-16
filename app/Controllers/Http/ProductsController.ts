@@ -129,6 +129,13 @@ export default class ProductsController {
 
       const product = await Product.findOrFail(params.id)
 
+      await product.load('sales')
+
+      if (product.sales.length > 0) {
+        session.flash('error', 'Esse produto está associado a uma ou mais vendas!')
+        return response.redirect().back()
+      }
+
       await product.delete()
 
       session.flash('success', 'Produto removido!')

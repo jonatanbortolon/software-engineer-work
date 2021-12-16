@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 import { compose } from '@ioc:Adonis/Core/Helpers'
 import {
   BaseModel,
-  beforeDelete,
   beforeSave,
   BelongsTo,
   belongsTo,
@@ -91,17 +90,6 @@ export default class Client extends compose(BaseModel, SoftDeletes) {
   public static async formatDocumentSave(client: Client) {
     if (client.$dirty.document) {
       client.document = client.document.replace(/\D+/g, '').replace(/\s/g, '')
-    }
-  }
-
-  @beforeDelete()
-  public static async deleteSales(client: Client) {
-    await client.load('sales')
-
-    const sales = client.sales ?? []
-
-    for (const sale of sales) {
-      await sale.delete()
     }
   }
 
