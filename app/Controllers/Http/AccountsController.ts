@@ -19,7 +19,9 @@ export default class AccountsController {
       .whereNull('used_at')
       .first()
 
-    const accounts = await User.query().withScopes((scope) => scope.accountScope(auth.user!.id))
+    const accounts = await User.query().withScopes((scope) =>
+      scope.accountScope(auth.user!.accountId)
+    )
 
     return view.render('accounts', {
       baseUrl: Env.get('BASE_URL'),
